@@ -1,6 +1,7 @@
 from django.db import models
 from apps.products.models import Product
 
+#FIXME: asdasda
 class Order(models.Model):
     order_number = models.PositiveSmallIntegerField(default=1, unique=True)
     order_date = models.DateTimeField(auto_now_add=True)
