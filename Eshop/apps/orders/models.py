@@ -1,33 +1,44 @@
+import uuid
 from django.db import models
-from apps.products.models import Product
 
-#FIXME: asdasda
 class Order(models.Model):
-    order_number = models.PositiveSmallIntegerField(default=1, unique=True)
+    order_number = models.UUIDField(default=uuid.uuid4(), editable=True)
     order_date = models.DateTimeField(auto_now_add=True)
+    class Status:
+        new = 'New order'
+        processing = 'Order processing'
+        packing = 'Packing'
+        finished = 'Finished'
     status_list = [
-        ('Нове замовлення', 'Нове замовлення'),
-        ('Обробляеться менеджером','Обробляеться менеджером'),
-        ('Комплектуэться','Комплектуэться'),
-        ('Виконано','Виконано'),
+        (Status.new, 'New order'),
+        (Status.processing, 'Order processing'),
+        (Status.packing, 'Packing'),
+        (Status.finished, 'Finished'),
     ]
-    order_status = models.CharField(max_length=100, default='Нове замовлення', choices=status_list)
+    order_status = models.CharField(max_length=100, default=Status.new, choices=status_list)
+    class Payment:
+        cash = 'Cash'
+        portmone = 'Portmone'
     payment_list = [
-        ('Готівка', 'Готівка'),
-        ('Portmone', 'Portmone'),
+        (Payment.cash, 'Cash'),
+        (Payment.portmone, 'Portmone'),
     ]
     order_payment = models.CharField(max_length=100, blank=False, choices=payment_list)
+    class Shipment:
+        pickup = 'Pickup'
+        new_post = 'New Post'
     shipment_list = [
-        ('Самовивіз', 'Самовивіз'),
-        ('Нова почта', 'Нова почта'),
+        (Shipment.pickup, 'Pickup'),
+        (Shipment.new_post, 'New Post'),
     ]
     order_shipment = models.CharField(max_length=100, blank=False, choices=shipment_list)
-    user = models.ForeignKey('User', on_delete=models.PROTECT)
-    product = models.ManyToManyField(Product, db_table='OrderItem')
-    amount_of_products =  models.PositiveSmallIntegerField(default=1)
+    user = models.ForeignKey('auth.User', on_delete=models.PROTECT, default=None)
 
     def __str__(self):
-        return self.order_number
+        return str(self.id)
 
-class User(models.Model):
-    pass
+class OrderItem(models.Model):
+    order = models.ForeignKey('Order', on_delete=models.PROTECT, default=None)
+    product = models.ForeignKey('products.Product', on_delete=models.PROTECT, default=None)
+    amount_of_products = models.PositiveSmallIntegerField(default=1)
+    discont = models.PositiveSmallIntegerField(default=0)
