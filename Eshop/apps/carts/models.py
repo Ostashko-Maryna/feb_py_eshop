@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
-from apps.products.models import Product
 
 class Cart(models.Model):
     active = models.BooleanField(default=True) # cart not empty
@@ -11,7 +10,7 @@ class Cart(models.Model):
     
 
 class CartItem(models.Model):
-    product_in = models.ManyToManyField(Product, blank=True)
+    product_in = models.ForeignKey('products.Product', on_delete=models.SET_NULL, null=True, blank=True)
     quantity = models.IntegerField(default=1)
     price_total = models.FloatField(blank=True)
     cart = models.ForeignKey('Cart', on_delete=models.CASCADE)
