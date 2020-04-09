@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 
 
-class Description(models.Model):
+class Description(models.Model):#FIXME: rename to Kit
     description = models.TextField(max_length=5000, blank=True, verbose_name='Опис')
     characteristics = models.CharField(max_length=500, blank=True, verbose_name='Характеристики')
 
@@ -21,23 +21,21 @@ class Galleries(models.Model):
 
 
 class Product(models.Model):
-# django resists !!!???
-  #  vendor_code = models.CharField(max_length=15, verbose_name='Артикул')
-  # Will we need a field (column) Category here?
-  # category = models.ForeignKey('catalog.Category', on_delete=models.CASCADE, related_name='products', verbose_name='Категорія')
+    # django resists !!!???
+    vendor_code = models.CharField(max_length=15, default='', verbose_name='Артикул')
+    # Will we need a field (column) Category here?
+    # category = models.ForeignKey('catalog.Category', on_delete=models.CASCADE, related_name='products', verbose_name='Категорія')
     name = models.CharField(max_length=200, db_index=True, verbose_name='Назва')
     price = models.FloatField(default=0, verbose_name='Ціна')
     stock_count = models.PositiveIntegerField(default=0, verbose_name='В наявності')
-   # image = models.ForeignKey('galleries.Galleries', blank=True, on_delete=models.SET(False), related_name='products', verbose_name='Фото')
-# django resists !!!???
-   # image = models.ForeignKey(Galleries, blank=True, on_delete=models.SET(False), related_name='products', verbose_name='Фото')
-    description = models.ManyToManyField(Description, blank=True, related_name='products', verbose_name='Опис')
-# django resists !!!???
-   # review = models.ForeignKey(Review, on_delete=models.SET(False), blank=True, related_name='products', verbose_name='Відгук')
+    description = models.TextField(max_length=5000, default='', verbose_name='Опис')
+
+    # django resists !!!???
+    # review = models.ForeignKey(Review, on_delete=models.SET(False), blank=True, related_name='products', verbose_name='Відгук')
     available = models.BooleanField(default=True, verbose_name='Доступно')
-# django resists !!!???
-   # created = models.DateTimeField(auto_now_add=True, default=timezone.now(), verbose_name='Створено')
-   # created = models.DateTimeField(auto_now_add=True, verbose_name='Створено')
+    # django resists !!!???
+    # created = models.DateTimeField(auto_now_add=True, default=timezone.now(), verbose_name='Створено')
+    # created = models.DateTimeField(auto_now_add=True, verbose_name='Створено')
     updated = models.DateTimeField(auto_now=True, verbose_name='Оновлено')
 
     def __str__(self):
