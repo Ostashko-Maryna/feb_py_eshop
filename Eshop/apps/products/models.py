@@ -19,6 +19,7 @@ class Galleries(models.Model):
     pass
 
 
+
 class Product(models.Model):
 # django resists !!!???
   #  vendor_code = models.CharField(max_length=15, verbose_name='Артикул')
