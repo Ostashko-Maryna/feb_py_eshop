@@ -2,14 +2,8 @@ from django.db import models
 from django.utils.timezone import now
 
 
-class Product(models.Model):
-    vendor_code = models.CharField(max_length=15, default='', db_index=True, verbose_name='Артикул')
-    # category = models.ForeignKey('catalog.Category', on_delete=models.CASCADE, related_name='products',
-    #                              verbose_name='Категорія')
-    name = models.CharField(max_length=200, db_index=True, verbose_name='Назва')
-    price = models.FloatField(default=0.0, verbose_name='Ціна')
-    stock_count = models.PositiveIntegerField(default=0, verbose_name='В наявності')
-    description = models.TextField(max_length=5000, default='', verbose_name='Опис')
+class Description(models.Model):#FIXME: rename to Kit
+    description = models.TextField(max_length=5000, blank=True, verbose_name='Опис')
     characteristics = models.CharField(max_length=500, blank=True, verbose_name='Характеристики')
     available = models.BooleanField(default=True, verbose_name='Доступно')
     created_by = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, related_name='created_product',
@@ -33,15 +27,26 @@ class Review(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name='Створено')
 
 
-class Kit(models.Model):
-    kits_products_sn = models.ManyToManyField(Product, related_name='kits_products_sn')
-    description = models.TextField(max_length=5000, verbose_name='Опис')
+# temporarily until the 'Galleries' model
+class Galleries(models.Model):
+    pass
+
+
+class Product(models.Model):
+    # django resists !!!???
+    vendor_code = models.CharField(max_length=15, default='', verbose_name='Артикул')
+    # Will we need a field (column) Category here?
+    # category = models.ForeignKey('catalog.Category', on_delete=models.CASCADE, related_name='products', verbose_name='Категорія')
+    name = models.CharField(max_length=200, db_index=True, verbose_name='Назва')
+    price = models.FloatField(default=0, verbose_name='Ціна')
+    stock_count = models.PositiveIntegerField(default=0, verbose_name='В наявності')
+    description = models.TextField(max_length=5000, default='', verbose_name='Опис')
+
+    # django resists !!!???
+    # review = models.ForeignKey(Review, on_delete=models.SET(False), blank=True, related_name='products', verbose_name='Відгук')
     available = models.BooleanField(default=True, verbose_name='Доступно')
-    term = models.DateTimeField(blank=True, verbose_name='Термін до')
-    created_by = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, related_name='created_kit',
-                                   verbose_name='Створено користувачем')
-    # updated_by = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, related_name='updated_kit',
-    #                                verbose_name='Оновлено користувачем')
-    created = models.DateTimeField(auto_now_add=True, verbose_name='Створено')
+    # django resists !!!???
+    # created = models.DateTimeField(auto_now_add=True, default=timezone.now(), verbose_name='Створено')
+    # created = models.DateTimeField(auto_now_add=True, verbose_name='Створено')
     updated = models.DateTimeField(auto_now=True, verbose_name='Оновлено')
 
