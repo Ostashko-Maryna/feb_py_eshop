@@ -2,7 +2,7 @@ import uuid
 from django.db import models
 
 class Order(models.Model):
-    order_number = models.UUIDField(default=uuid.uuid4(), editable=True)
+    order_number = models.UUIDField(default=uuid.uuid4, editable=True)
     order_date = models.DateTimeField(auto_now_add=True)
     class Status:
         new = 'New order'
@@ -38,7 +38,7 @@ class Order(models.Model):
         return str(self.id)
 
 class OrderItem(models.Model):
-    order = models.ForeignKey('Order', on_delete=models.PROTECT, default=None)
-    product = models.ForeignKey('products.Product', on_delete=models.PROTECT, default=None)
+    order = models.ForeignKey('Order', on_delete=models.PROTECT)
+    product = models.ForeignKey('products.Product', on_delete=models.PROTECT)
     amount_of_products = models.PositiveSmallIntegerField(default=1)
     discont = models.PositiveSmallIntegerField(default=0)
