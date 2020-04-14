@@ -1,0 +1,5 @@
+Django==2.2.12
+django-jet==1.0.8
+djangorestframework==3.11.0
+celery==4.4.2
+#RabbitMQ 3.8.3

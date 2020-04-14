@@ -25,21 +25,26 @@ SECRET_KEY = '#u9^&4%yi2lew2leu&41kchfc&e)j6&)2g@)k!g@zc%9+mm2#)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     'jet',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'apps.products',
     'apps.user_profiles',
+    'apps.notifications',
+    'apps.orders'
 ]
 
 MIDDLEWARE = [
@@ -78,8 +83,12 @@ WSGI_APPLICATION = 'Eshop.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'eshop',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': 5432,
     }
 }
 
@@ -121,3 +130,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# CELERY SETTINGS
+CELERY_BROKER_URL = 'redis://h:pb397d2414c2577f538fa4bddaa5e1f1631bc8106ddfdad886a4012b75c16ec6c@ec2-3-221-148-146.compute-1.amazonaws.com:16139'
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'your gmail account'
+EMAIL_HOST_PASSWORD = 'password'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+from .local_settings import *
+
