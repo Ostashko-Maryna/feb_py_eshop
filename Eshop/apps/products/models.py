@@ -16,7 +16,7 @@ class Product(models.Model):
                                    verbose_name='Створено користувачем')
     # updated_by = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, related_name='updated_product',
     #                                verbose_name='Оновлено користувачем')
-    created_at = models.DateTimeField(default=now, verbose_name='Створено')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Створено')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Оновлено')
 
     def __str__(self):
