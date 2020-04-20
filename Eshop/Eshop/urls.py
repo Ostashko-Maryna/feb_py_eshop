@@ -21,6 +21,6 @@ from django.urls import include, path
 urlpatterns = [
     path('jet/', include('jet.urls', 'jet')),
     path('admin/', admin.site.urls),
-    path('user_profiles/', include('apps.user_profiles.urls')),
+    #path('user_profiles/', include('apps.user_profiles.urls')),
     path('notifications/', include('apps.notifications.urls'))
 ]
