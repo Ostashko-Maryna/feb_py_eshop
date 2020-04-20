@@ -16,25 +16,25 @@ class Product(models.Model):
                                    verbose_name='Створено користувачем')
     # updated_by = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, related_name='updated_product',
     #                                verbose_name='Оновлено користувачем')
-    created = models.DateTimeField(default=now, verbose_name='Створено')
-    updated = models.DateTimeField(auto_now=True, verbose_name='Оновлено')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Створено')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Оновлено')
 
     def __str__(self):
         return '{} {}'.format(self.name, self.price)
 
 
 class Review(models.Model):
-    product_sn = models.ForeignKey(Product, default=0, on_delete=models.SET_NULL, null=True, related_name='product_sn',
-                                   verbose_name='Відгук')
+    product = models.ForeignKey(Product, default=0, on_delete=models.SET_NULL, null=True,
+                                related_name='product', verbose_name='Відгук')
     user = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, related_name='reviewer',
                              verbose_name='Користувач')
     review = models.TextField(max_length=5000, verbose_name='Відгук')
     available = models.BooleanField(default=True, verbose_name='Доступно')
-    created = models.DateTimeField(auto_now_add=True, verbose_name='Створено')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Створено')
 
 
 class Kit(models.Model):
-    kits_products_sn = models.ManyToManyField(Product, related_name='kits_products_sn')
+    kits_product = models.ManyToManyField(Product, related_name='kits_product')
     description = models.TextField(max_length=5000, verbose_name='Опис')
     available = models.BooleanField(default=True, verbose_name='Доступно')
     term = models.DateTimeField(blank=True, verbose_name='Термін до')
@@ -42,5 +42,5 @@ class Kit(models.Model):
                                    verbose_name='Створено користувачем')
     # updated_by = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, related_name='updated_kit',
     #                                verbose_name='Оновлено користувачем')
-    created = models.DateTimeField(auto_now_add=True, verbose_name='Створено')
-    updated = models.DateTimeField(auto_now=True, verbose_name='Оновлено')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Створено')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Оновлено')
