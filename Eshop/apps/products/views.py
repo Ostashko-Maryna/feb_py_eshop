@@ -29,15 +29,14 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
         return obj
 
 
-class ProductReviews(generics.RetrieveUpdateDestroyAPIView):
-    # @property
-    # def get_object(self):
-    #     product = get_object_or_404(Product, pk=self.kwargs.get('product_id'))
-    #     return product
-    #
-    # product = get_object
+class ProductReviews(generics.ListAPIView):
 
     serializer_class = ReviewSerializer
+
+    def get_queryset(self):
+        product = get_object_or_404(Product, pk=self.kwargs.get('product_id'))
+        #return Review.objects.filter(prduct_id=self.kwargs.get('product_id'))
+        return product.reviews.all()
 
 
 class ReviewList(generics.ListCreateAPIView):
