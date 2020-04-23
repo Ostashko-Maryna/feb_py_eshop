@@ -1,7 +1,6 @@
 from django.db import models
-# ~ from apps.wallets import Wallet
-# ~ from apps.user_profiles import User
-# ~ from apps.orders import Order
+from django_fsm import FSMField, transition
+
 
 class Payments(models.Model):
 	payment_date = models.DateTimeField(auto_now_add=True)
@@ -12,21 +11,47 @@ class Payments(models.Model):
 	
 	class Status:
 		submitted = 'submitted'
+		processing = 'processing'
 		completed = 'completed'
 		suspended = 'suspended'		
 		declined = 'declined'
 	
 	status_list = [
         (Status.submitted, 'submitted'),
+		(Status.processing, 'processing'),
         (Status.completed, 'completed'),
         (Status.suspended, 'suspended'),
         (Status.declined, 'declined'),
     ]
-	
+	'''
 	status = models.CharField(max_length=10, 
 		choices=status_list,
 		default=Status.submitted,
 	)
+	'''
+
+	status = FSMField(default=status_list[0], choices=status_list)
+	
+	@transition(field=status, source=['submitted', 'suspended'],
+		target='processing'
+	)
+	def submit(self):
+		pass
+	
+	@transition(field=status, source='processing', target='suspended')
+	def suspend(self):
+		pass
+	
+	@transition(field=status, source='processing', target='completed')
+	def complete(self):
+		pass
+	
+	@transition(field=status, source=['processing', 'suspended'],
+		target='declined'
+	)
+	def decline(self):
+		pass
+
 
 	class PaymentSystem:
 		portmone = 'portmone'
