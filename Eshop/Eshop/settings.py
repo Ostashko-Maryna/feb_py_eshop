@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'rest_framework',
 	'jet',
 	'django_fsm',
+	'django_json_widget',
 	'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
