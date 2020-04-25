@@ -1,10 +1,16 @@
 from django.contrib import admin
-from . models import UserProfile
+from . models import UserProfile, DeliveryAddress
 
 
 class UserProfileAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['user', 'first_name', 'last_name', 'date_of_birth', 'phone_number', 'vip_status']
 
 
 admin.site.register(UserProfile, UserProfileAdmin)
-#admin.site.register(UserProfile, DeliveryAddress)
+
+
+class DeliveryAddressAdmin(admin.ModelAdmin):
+    list_display = ['user', 'region', 'city', 'street', 'house_number', 'apartment_number', 'zip_code']
+
+
+admin.site.register(DeliveryAddress, DeliveryAddressAdmin)
