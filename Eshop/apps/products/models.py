@@ -25,7 +25,7 @@ class Product(models.Model):
 
 class Review(models.Model):
     product = models.ForeignKey(Product, default=0, on_delete=models.SET_NULL, null=True,
-                                related_name='product', verbose_name='Відгук')
+                                related_name='reviews', verbose_name='Відгук')
     user = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, related_name='reviewer',
                              verbose_name='Користувач')
     review = models.TextField(max_length=5000, verbose_name='Відгук')
