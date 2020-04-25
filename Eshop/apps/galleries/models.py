@@ -7,13 +7,19 @@ class Gallery(models.Model):
     name = models.CharField(max_length=100)
     
     class Size:
-    	min_size = 'min',
-    	max_size = 'max',
+    	min_size = 'min'
+    	max_size = 'max'
     	mid_size = 'middle'
 
-    size = models.CharField(max_length=100, choices=Size, default=Size.min_size)
-    size_x = models.IntegerField()
-    size_y = models.IntegerField()
+    size_list = [
+    	(Size.min_size, 'min'),
+    	(Size.max_size, 'max'),
+    	(Size.mid_size, 'middle'),
+    ]
+
+    size = models.CharField(max_length=100, default=Size.mid_size, choices=size_list)
+    size_x = models.IntegerField(null=True)
+    size_y = models.IntegerField(null=True)
 
     def __str__(self):
         return "{} {}".format(self.product, self.name)
