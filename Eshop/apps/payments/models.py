@@ -8,7 +8,7 @@ class Payments(models.Model):
 	user = models.ForeignKey('auth.User', on_delete=models.PROTECT)
 	order = models.ForeignKey('orders.Order', on_delete=models.PROTECT)
 	paymentsystem = models.CharField(max_length=50)
-	
+	#TODO: payment_sum
 	
 	class Status:
 		submitted = 'submitted'
