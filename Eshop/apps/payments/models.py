@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import JSONField
 from django_fsm import FSMField, transition
 
 
@@ -6,8 +7,8 @@ class Payments(models.Model):
 	payment_date = models.DateTimeField(auto_now_add=True)
 	user = models.ForeignKey('auth.User', on_delete=models.PROTECT)
 	order = models.ForeignKey('orders.Order', on_delete=models.PROTECT)
-	paysystem = models.CharField(max_length=50)
-	
+	paymentsystem = models.CharField(max_length=50)
+	#TODO: payment_sum
 	
 	class Status:
 		submitted = 'submitted'
@@ -64,7 +65,11 @@ class Payments(models.Model):
 
 	class Meta:
 		verbose_name_plural = 'Payments'
-	
+	'''		
+	@classmethod
+	def create_payment(cls, user, paymentsystem, sum, order)
+		pass
+	'''	
 	def __str__(self):
 		return 'user {} has payed for order {}'.format(self.user, self.order)
 
@@ -73,11 +78,13 @@ class PaymentSystemLog(models.Model):
 	order = models.ForeignKey('orders.Order', on_delete=models.PROTECT)
 	
 	#data sent to payments_system
-	raw_data = models.TextField()
+	raw_data = JSONField()
+	payer_id = models.CharField(max_length=50)
 	sent_at = models.DateTimeField(auto_now=True)
 
 	#response from payments_system	
-	raw_response = models.TextField()
+	raw_response = JSONField()
+	receiver_id = models.CharField(max_length=50)
 	processed_at = models.DateTimeField(auto_now=True)
 
 	processed_ok = models.BooleanField(default=True)

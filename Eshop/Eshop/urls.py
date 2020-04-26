@@ -24,6 +24,7 @@ urlpatterns = [
 	path('payments/', include('apps.payments.urls')),
     path('notifications/', include('apps.notifications.urls')),
     path('products/', include('apps.products.urls')),
-    path('cart/', include('apps.carts.urls'))
     #path('user_profiles/', include('apps.user_profiles.urls')),
+    path('cart/', include('apps.carts.urls')),
+    path('galleries/', include('apps.galleries.urls')),
 ]
