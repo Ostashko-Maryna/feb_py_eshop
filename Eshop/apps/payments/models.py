@@ -65,7 +65,11 @@ class Payments(models.Model):
 
 	class Meta:
 		verbose_name_plural = 'Payments'
-	
+	'''		
+	@classmethod
+	def create_payment(cls, user, paymentsystem, sum, order)
+		pass
+	'''	
 	def __str__(self):
 		return 'user {} has payed for order {}'.format(self.user, self.order)
 
