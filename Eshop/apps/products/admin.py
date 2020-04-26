@@ -13,7 +13,7 @@ class ProductAdmin(admin.ModelAdmin):
         ('Ціна та Наявність',                  {'fields': ['price', 'stock_count']}),
         ('Опис',                               {'fields': ['description']}),
         ('Характеристики',                     {'fields': ['characteristics']}),
-        ('Дані щодо Створення та Доступності', {'fields': ['created_by', 'created_at', 'available']}),
+        ('Дані щодо Створення та Доступності', {'fields': ['available']}),
     ]
     inlines = [ReviewInline]
     list_display = ['id', 'vendor_code', 'name', 'price', 'stock_count', 'description',
