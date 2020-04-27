@@ -11,5 +11,5 @@ class PaymentsSerializer(serializers.ModelSerializer):
 			'payment_date',
 			'user',
 			'order',
-			'paysystem',
+			'paymentsystem',
 		]
