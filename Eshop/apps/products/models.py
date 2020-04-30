@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils.timezone import now
+# from django.utils.timezone import now
 
 
 class Product(models.Model):
@@ -25,8 +25,8 @@ class Product(models.Model):
 
 class Review(models.Model):
     product = models.ForeignKey(Product, default=0, on_delete=models.SET_NULL, null=True,
-                                related_name='reviews', verbose_name='Відгук')
-    user = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, related_name='reviewer',
+                                related_name='reviews', verbose_name='Продукт')
+    user = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, related_name='reviews',
                              verbose_name='Користувач')
     review = models.TextField(max_length=5000, verbose_name='Відгук')
     available = models.BooleanField(default=True, verbose_name='Доступно')
@@ -34,7 +34,7 @@ class Review(models.Model):
 
 
 class Kit(models.Model):
-    kits_product = models.ManyToManyField(Product, related_name='kits_product')
+    products = models.ManyToManyField(Product, related_name='kits', verbose_name='Продукти')
     description = models.TextField(max_length=5000, verbose_name='Опис')
     available = models.BooleanField(default=True, verbose_name='Доступно')
     term = models.DateTimeField(blank=True, verbose_name='Термін до')
