@@ -32,14 +32,16 @@ class Order(models.Model):
         (Shipment.new_post, 'New Post'),
     ]
     order_shipment = models.CharField(max_length=100, blank=False, choices=shipment_list)
-    user = models.ForeignKey('auth.User', on_delete=models.PROTECT, null=True, blank=False)
+    user = models.ForeignKey('auth.User', on_delete=models.PROTECT, null=True, blank=False, related_name='order')
     order_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
         return str(self.order_number)
 
 class OrderItem(models.Model):
-    order = models.ForeignKey('Order', on_delete=models.PROTECT, null=True, blank=False)
+    order = models.ForeignKey('Order', on_delete=models.PROTECT, null=True, blank=False, related_name='orderitem')
     product = models.ForeignKey('products.Product', on_delete=models.PROTECT, null=True, blank=False)
     amount_of_products = models.PositiveSmallIntegerField(default=1)
     discont = models.PositiveSmallIntegerField(default=0)
+    def __str__(self):
+        return 'Product "{}" in Order #{}'.format(self.product, self.order)
