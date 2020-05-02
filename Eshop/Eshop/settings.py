@@ -32,9 +32,10 @@ ALLOWED_HOSTS = ['127.0.0.1']
 
 INSTALLED_APPS = [
     'rest_framework',
-    'jet',
-
-    'django.contrib.admin',
+	'jet',
+	'django_fsm',
+	'django_json_widget',
+	'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -42,8 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'apps.products',
+	'apps.payments',
     'apps.notifications',
-    'apps.orders'
+    'apps.orders',
+    'apps.galleries',
+    'apps.carts',
 ]
 
 MIDDLEWARE = [
