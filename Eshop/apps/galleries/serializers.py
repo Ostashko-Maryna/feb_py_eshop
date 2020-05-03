@@ -5,9 +5,9 @@ from apps.galleries.models import Gallery
 
 class GallerySerializer(serializers.ModelSerializer):
     #image = serializers.ImageField(write_only=True)
-    #url = serializers.CharField(source='logo_url', read_only=True)
+    #image_url = serializers.CharField(source='logo_url', read_only=True)
     
     class Meta:
         model = Gallery
-        fields = ['id', 'product', 'name', 'image', 'size', 'size_x', 'size_y'] #url
+        fields = ['id', 'product', 'name', 'image', 'size', 'size_x', 'size_y'] #image_url
 
