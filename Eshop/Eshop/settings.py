@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'apps.products',
-    'apps.user_profiles',
 	'apps.payments',
     'apps.notifications',
     'apps.orders',
@@ -89,9 +88,9 @@ WSGI_APPLICATION = 'Eshop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'eshop',
-        'USER': '',
-        'PASSWORD': '',
+        'NAME': 'Test_DB_007',
+        'USER': 'postgres',
+        'PASSWORD': '1995asd',
         'HOST': 'localhost',
         'PORT': 5432,
     }
@@ -142,11 +141,11 @@ CELERY_BROKER_URL = 'redis://h:pb397d2414c2577f538fa4bddaa5e1f1631bc8106ddfdad88
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'your gmail account'
-EMAIL_HOST_PASSWORD = 'password'
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'your gmail account'
+# EMAIL_HOST_PASSWORD = 'password'
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = False
 
-from .local_settings import *
+# from .local_settings import *
