@@ -19,6 +19,11 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Створено')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Оновлено')
 
+    @property
+    def quantity_left(self):
+        #TODO: rise error if < 0
+        return self.stock_count - sum([ci.quantity for ci in self.cartitem_set.all()])
+
     def __str__(self):
         return '{} {}'.format(self.name, self.price)
 
