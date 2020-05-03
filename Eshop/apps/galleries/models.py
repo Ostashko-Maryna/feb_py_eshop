@@ -20,7 +20,14 @@ class Gallery(models.Model):
     size = models.CharField(max_length=100, default=Size.mid_size, choices=size_list)
     size_x = models.IntegerField(null=True)
     size_y = models.IntegerField(null=True)
-
+    @property
+    def image_url(self):
+        try:
+            # check file exist
+            self.image.file
+        except FileNotFoundError:
+            return None
+        return self.image.url
     def __str__(self):
         return "{} {}".format(self.product, self.name)
 
