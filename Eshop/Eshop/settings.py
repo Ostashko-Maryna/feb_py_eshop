@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'apps.orders',
     'apps.galleries',
     'apps.carts',
+    'apps.shipments'
 ]
 
 MIDDLEWARE = [
@@ -148,4 +149,3 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
 from .local_settings import *
-
