@@ -24,6 +24,7 @@ class Product(models.Model):
         #TODO: rise error if < 0
         return self.stock_count - sum([ci.quantity for ci in self.cartitem_set.all()])
 
+
     def __str__(self):
         return '{} {}'.format(self.name, self.price)
 
