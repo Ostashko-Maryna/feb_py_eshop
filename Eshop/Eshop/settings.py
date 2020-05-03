@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'apps.products',
-	'apps.payments',
+    'apps.user_profiles',
+    'apps.payments',
     'apps.notifications',
     'apps.orders',
     'apps.galleries',
@@ -88,9 +89,9 @@ WSGI_APPLICATION = 'Eshop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'Test_DB_007',
-        'USER': 'postgres',
-        'PASSWORD': '1995asd',
+        'NAME': 'eshop',
+        'USER': '',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': 5432,
     }
