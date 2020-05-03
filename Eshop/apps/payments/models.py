@@ -17,12 +17,27 @@ class Payments(models.Model):
 	billAmount = models.FloatField()
 	payment_date = models.DateTimeField(auto_now_add=True)
 	
-	@classmethod
-	def create_payment(cls, user, order, paymentsystem, billAmount):
-		new_payment = cls(user)
-		new_payment.order = order
-		new_payment.paymentsystem = paymentsystem
-		new_payment.billAmount = billAmount
+    '''
+     /order/<order_id>/pay
+     class PayOrder(generic.CreateView):
+        def create(self)
+            order = get_object_or_404(Order, pk=self.kwargs.order_id)
+            paymentsystem = self.request.json['paymentsystem']
+            order.paymentsystem = paymentsystem
+            payment = Payment.create_payment(
+                user=self.request.user, 
+                order=order,
+                paymentsystem=paymentsystem
+            )
+                
+    '''
+    @classmethod
+    def create_payment(cls, user, order, paymentsystem):
+        new_payment = cls(user)
+        new_payment.order = order
+        new_payment.paymentsystem = paymentsystem
+        new_payment.billAmount = order.order_cost
+        new_payment.save()
 		return new_payment
 
 	

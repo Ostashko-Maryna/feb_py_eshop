@@ -7,7 +7,7 @@ class Product(models.Model):
     # category = models.ForeignKey('catalog.Category', on_delete=models.CASCADE, related_name='products',
     #                              verbose_name='Категорія')
     name = models.CharField(max_length=200, db_index=True, verbose_name='Назва')
-    price = models.FloatField(default=0.0, verbose_name='Ціна')
+    price = models.FloatField(default=0.0, verbose_name='Ціна') 
     stock_count = models.PositiveIntegerField(default=0, verbose_name='В наявності')
     description = models.TextField(max_length=5000, default='', verbose_name='Опис')
     characteristics = models.CharField(max_length=500, blank=True, verbose_name='Характеристики')
