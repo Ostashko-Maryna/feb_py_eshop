@@ -26,18 +26,17 @@ class Shipment(models.Model):
         ]
     variants = models.CharField(max_length=20, default = Shipment_variants.pickup, choices=variants_list)
 
-    # def for_str(word):
-        # a = word.split("-")
-        # return a[len(a)-1]
+    def for_str(word):
+        a = word.split("-")
+        return a[len(a)-1]
 
     def __str__(self):
-        return 'Order {}'.format(self.shipment_id)
+        return 'Order №{}'.format(Shipment.for_str(str(self.shipment_id)))
 
 class ShipmentLog():
     pass
 
 
+
 # notify message for user, notify response
 #TODO
-# sdf
-# sdf
