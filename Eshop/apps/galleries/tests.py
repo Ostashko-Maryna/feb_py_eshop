@@ -18,7 +18,7 @@ class GalleryTestAPI(TestCase):
 			'id': 1, 
 			'product': 1, 
 			'name': 'test_g1', 
-			'image': 'http://testserver/galleries/photo1.jpg', 
+			'image': 'http://testserver/galleries/photo1.jpg', #url
 			'size': 'middle', 
 			'size_x': None, 
 			'size_y': None
@@ -26,7 +26,7 @@ class GalleryTestAPI(TestCase):
 			'id': 2, 
 			'product': 2, 
 			'name': 'test_g2', 
-			'image': 'http://testserver/galleries/photo2.jpg', 
+			'image': 'http://testserver/galleries/photo2.jpg', #url
 			'size': 'middle', 
 			'size_x': None, 
 			'size_y': None
@@ -39,7 +39,7 @@ class GalleryTestAPI(TestCase):
 			'id': 2, 
 			'product': 2, 
 			'name': 'test_g2', 
-			'image': 'http://testserver/galleries/2/photo2.jpg', 
+			'image': 'http://testserver/galleries/2/photo2.jpg', #url
 			'size': 'middle', 
 			'size_x': None, 
 			'size_y': None
@@ -52,7 +52,7 @@ class GalleryTestAPI(TestCase):
 			'id': 2, 
 			'product': 2, 
 			'name': 'test_g2', 
-			'image': 'http://testserver/galleries/1/2/photo2.jpg', 
+			'image': 'http://testserver/galleries/1/2/photo2.jpg', #url
 			'size': 'middle', 
 			'size_x': None, 
 			'size_y': None
@@ -61,5 +61,5 @@ class GalleryTestAPI(TestCase):
 	# def test_list_post(self):
 	# 	print('==================')
 	# 	with open('photo3.jpg', 'rb') as fp:
-	# 		response = self.c.post('/galleries/', {'name': 'test_post', 'product': 2, 'image': 'fp'}, format='json')
+	# 		response = self.c.post('/galleries/', {'name': 'test_post', 'product': 2, 'image': fp}, format='json')
 	# 	print(response.status_code, response.json())
