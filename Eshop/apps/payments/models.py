@@ -2,36 +2,63 @@ from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django_fsm import FSMField, transition
 
+paymentsystem_list = [
+	('portmone', 'portmone'),
+	('cash', 'cash'),
+]
+
+class Status:
+	submitted = 'submitted'
+	processing = 'processing'
+	completed = 'completed'
+	suspended = 'suspended'		
+	declined = 'declined'
+
+status_list = [
+	(Status.submitted, 'submitted'),
+	(Status.processing, 'processing'),
+	(Status.completed, 'completed'),
+	(Status.suspended, 'suspended'),
+	(Status.declined, 'declined'),
+]
+
 
 class Payments(models.Model):
+	user = models.ForeignKey('auth.User', on_delete=models.PROTECT, 
+		null=True, blank=False
+	)
+	order = models.ForeignKey('orders.Order', on_delete=models.PROTECT,
+		null=True, blank=False
+	)
+	paymentsystem = models.CharField(max_length=10, 
+		choices=paymentsystem_list, default='portmone'
+	)
+	billAmount = models.FloatField(default=0.0)
 	payment_date = models.DateTimeField(auto_now_add=True)
-	user = models.ForeignKey('auth.User', on_delete=models.PROTECT)
-	order = models.ForeignKey('orders.Order', on_delete=models.PROTECT)
-	paymentsystem = models.CharField(max_length=50)
-	#TODO: payment_sum
+	status = FSMField(default=status_list[0], choices=status_list)
 	
-	class Status:
-		submitted = 'submitted'
-		processing = 'processing'
-		completed = 'completed'
-		suspended = 'suspended'		
-		declined = 'declined'
 	
-	status_list = [
-        (Status.submitted, 'submitted'),
-		(Status.processing, 'processing'),
-        (Status.completed, 'completed'),
-        (Status.suspended, 'suspended'),
-        (Status.declined, 'declined'),
-    ]
+	# ~ class Status:
+		# ~ submitted = 'submitted'
+		# ~ processing = 'processing'
+		# ~ completed = 'completed'
+		# ~ suspended = 'suspended'		
+		# ~ declined = 'declined'
+	
+	# ~ status_list = [
+        # ~ (Status.submitted, 'submitted'),
+		# ~ (Status.processing, 'processing'),
+        # ~ (Status.completed, 'completed'),
+        # ~ (Status.suspended, 'suspended'),
+        # ~ (Status.declined, 'declined'),
+    # ~ ]
+
 	'''
 	status = models.CharField(max_length=10, 
 		choices=status_list,
 		default=Status.submitted,
 	)
 	'''
-
-	status = FSMField(default=status_list[0], choices=status_list)
 	
 	@transition(field=status, source=['submitted', 'suspended'],
 		target='processing'
@@ -52,6 +79,15 @@ class Payments(models.Model):
 	)
 	def decline(self):
 		pass
+
+	@classmethod
+	def create_payment(cls, user, order):
+		new_payment = cls(user)
+		new_payment.order = order
+		new_payment.paymentsystem = paymentsystem
+		new_payment.billAmount = order.order_cost
+		new_payment.save()
+		return new_payment
 
 
 	class PaymentSystem:
@@ -75,19 +111,21 @@ class Payments(models.Model):
 
 
 class PaymentSystemLog(models.Model):
-	order = models.ForeignKey('orders.Order', on_delete=models.PROTECT)
-	
 	#data sent to payments_system
+	shopOrderNumber = models.ForeignKey('orders.Order', 
+		on_delete=models.PROTECT
+	)
+	payeeId = models.IntegerField()
+	dt = models.DateTimeField(auto_now=True) #sent_at
+	billAmount = models.FloatField()
 	raw_data = JSONField()
-	payer_id = models.CharField(max_length=50)
-	sent_at = models.DateTimeField(auto_now=True)
 
-	#response from payments_system	
+	#response from payments_system
+	SHOPBILLID = models.IntegerField()
+	SHOPORDERNUMBER = models.CharField(max_length=50)
+	BILL_AMOUNT = models.FloatField()
+	RESULT = models.SmallIntegerField()
 	raw_response = JSONField()
-	receiver_id = models.CharField(max_length=50)
-	processed_at = models.DateTimeField(auto_now=True)
-
-	processed_ok = models.BooleanField(default=True)
 
 	def __str__(self):
 		return 'order {} is prossed {}'.format(self.order, self.processed_ok)
