@@ -1,17 +1,17 @@
 from django.db import models
-# from django.contrib.auth.models import User
-from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.core.validators import MinValueValidator, MaxValueValidator
-User = get_user_model()
+from django.utils.translation import gettext_lazy as _
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, 
+    customer = models.ForeignKey('auth.User', on_delete=models.CASCADE, 
                                  null=True, blank=True,
                                  verbose_name='Власник')
     created = models.DateTimeField(auto_now_add=True, verbose_name='Створено')
     updated = models.DateTimeField(auto_now=True, verbose_name='Змінено')
+    
+    def __str__(self):
+        return self.customer.username
     
     @property
     def not_empty(self):
@@ -27,13 +27,15 @@ class Cart(models.Model):
     @property
     def cart_list(self):
         return ['Назва товару: {} Ціна за одиницю: {} Кількість: {}'
-                .format(ci.product.name, ci.product.price, ci.quantity) 
-                for ci in self.cartitem_set.all() if ci.cart_item_status == 'Доступно'] 
+                .format(ci.product.name, ci.product.price, ci.quantity)
+                for ci in self.cartitem_set.all()
+                if ci.cart_item_status == 'Доступно']
     cart_list.fget.short_description = 'Кошик'
     
     @property
     def not_available(self):
-        return [ci.product.name for ci in self.cartitem_set.all() 
+        return ['{} {}'.format(ci.product.name, ci.cart_item_status) 
+                for ci in self.cartitem_set.all() 
                 if ci.cart_item_status == 'Не доступно' 
                 or ci.cart_item_status == 'Недостатня кількість']
     not_available.fget.short_description = 'Недоступні товари у кошику'
@@ -43,25 +45,39 @@ class CartItem(models.Model):
     product = models.ForeignKey('products.Product', 
                                 on_delete=models.SET_NULL, 
                                 null=True, blank=True,
-                                verbose_name = 'Назва продукту')    
+                                verbose_name = 'Назва продукту',
+                                related_name='cartitem',)
     cart = models.ForeignKey('carts.Cart', on_delete=models.CASCADE, 
-                             verbose_name='Кошик №',)
-    user = models.ForeignKey(User, 
+                             verbose_name='Власник кошика',)
+    customer = models.ForeignKey('auth.User', 
                                  on_delete=models.CASCADE, 
                                  null=True, blank=True,
-                                 verbose_name = 'Власник',
-                                 related_name='user')
+                                 verbose_name = 'Власник',)
+    quantity = models.PositiveSmallIntegerField(default=1, 
+                                                verbose_name='Кількість')
+
+    def clean(self):
+        if self.quantity > self.product.stock_count:
+            raise ValidationError(_('Доступно: %(value)s'),
+            params={'value': self.product.stock_count},)
+        elif self.quantity < 1:
+            raise ValidationError(_('Не менше %(value)s'),
+            params={'value': 1},)
     
-    # @property
-    # def field(self):
-    #     return self.product.stock_count
+    @property
+    def product_name(self):
+        return self.product.name
     
-    quantity = models.PositiveSmallIntegerField(default=1,
-                            validators=[
-                            MinValueValidator(1, 'Min value: 1'),
-                            MaxValueValidator(100, 'Max value: {}'.format(100),)
-                            ], 
-                            verbose_name='Кількість')
+    @property
+    def counter(self):
+        self.product.stock_count -= self.quantity
+        return self.product.stock_count
+    
+    @property
+    def stock_count(self):
+        return self.product.stock_count
+    stock_count.fget.short_description = 'Доступно на складі'
+               
     @property
     def cart_item_status(self):               
         if self.product.available == True and self.quantity <= self.product.stock_count:

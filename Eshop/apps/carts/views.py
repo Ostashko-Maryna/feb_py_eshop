@@ -24,6 +24,3 @@ class CartItemCreate(generics.CreateAPIView):
     serializer_class = CartItemSerializer
     permission_classes = (IsOwnerOrReadOnly, )
     
-    def get_object(self):
-        obj = get_object_or_404(CartDetail.queryset, pk=self.kwargs.get('pk'))
-        return obj         

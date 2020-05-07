@@ -5,4 +5,4 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:  # GET, HEAD or OPTIONS requests.
             return True
-        return obj.user == request.user # Instance must have an attribute named `user`.
+        return obj.customer == request.user # Instance must have an attribute named `user`.
