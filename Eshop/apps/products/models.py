@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils.timezone import now
+# from django.utils.timezone import now
 
 
 class Product(models.Model):
@@ -7,7 +7,7 @@ class Product(models.Model):
     # category = models.ForeignKey('catalog.Category', on_delete=models.CASCADE, related_name='products',
     #                              verbose_name='Категорія')
     name = models.CharField(max_length=200, db_index=True, verbose_name='Назва')
-    price = models.FloatField(default=0.0, verbose_name='Ціна')
+    price = models.FloatField(default=0.0, verbose_name='Ціна') 
     stock_count = models.PositiveIntegerField(default=0, verbose_name='В наявності')
     description = models.TextField(max_length=5000, default='', verbose_name='Опис')
     characteristics = models.CharField(max_length=500, blank=True, verbose_name='Характеристики')
@@ -19,14 +19,20 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Створено')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Оновлено')
 
+    @property
+    def quantity_left(self):
+        #TODO: rise error if < 0
+        return self.stock_count - sum([ci.quantity for ci in self.cartitem_set.all()])
+
+
     def __str__(self):
         return '{} {}'.format(self.name, self.price)
 
 
 class Review(models.Model):
     product = models.ForeignKey(Product, default=0, on_delete=models.SET_NULL, null=True,
-                                related_name='reviews', verbose_name='Відгук')
-    user = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, related_name='reviewer',
+                                related_name='reviews', verbose_name='Продукт')
+    user = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True, related_name='reviews',
                              verbose_name='Користувач')
     review = models.TextField(max_length=5000, verbose_name='Відгук')
     available = models.BooleanField(default=True, verbose_name='Доступно')
@@ -34,7 +40,7 @@ class Review(models.Model):
 
 
 class Kit(models.Model):
-    kits_product = models.ManyToManyField(Product, related_name='kits_product')
+    products = models.ManyToManyField(Product, related_name='kits', verbose_name='Продукти')
     description = models.TextField(max_length=5000, verbose_name='Опис')
     available = models.BooleanField(default=True, verbose_name='Доступно')
     term = models.DateTimeField(blank=True, verbose_name='Термін до')

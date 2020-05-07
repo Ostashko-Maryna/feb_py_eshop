@@ -32,14 +32,32 @@ class Order(models.Model):
         (Shipment.new_post, 'New Post'),
     ]
     order_shipment = models.CharField(max_length=100, blank=False, choices=shipment_list)
+<<<<<<< HEAD
     user = models.ForeignKey('auth.User', on_delete=models.PROTECT, default=None)
     order_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+=======
+    user = models.ForeignKey('auth.User', on_delete=models.PROTECT, null=True, blank=False, related_name='order')
+    order_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    
+    def save(self, *args, **kwargs):
+        self.order_cost = sum([oi.sell_price for oi in self.orderitem.all()])
+        super().save(*args, **kwargs)            
+>>>>>>> b51214a3d1da53e51895592b76bea9584629e638
 
     def __str__(self):
-        return str(self.id)
+        return str(self.order_number)
 
 class OrderItem(models.Model):
-    order = models.ForeignKey('Order', on_delete=models.PROTECT)
-    product = models.ForeignKey('products.Product', on_delete=models.PROTECT)
+    order = models.ForeignKey('Order', on_delete=models.PROTECT, null=True, blank=False, related_name='orderitem')
+    product = models.ForeignKey('products.Product', on_delete=models.PROTECT, null=True, blank=False)
     amount_of_products = models.PositiveSmallIntegerField(default=1)
     discont = models.PositiveSmallIntegerField(default=0)
+
+    @property
+    def sell_price(self):
+        if self.order.user.user_profile.vip_status:
+            return self.product.price * self.amount_of_products * 0.5
+        return self.product.price * self.amount_of_products * ((100-self.discont) / 100)
+
+    def __str__(self):
+        return 'Product "{}" in Order #{}'.format(self.product, self.order)

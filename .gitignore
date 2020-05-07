@@ -7,6 +7,7 @@ __pycache__/
 .DS_Store
 .idea/
 Eshop/.DS_Store
+static/
 
 # C extensions
 *.so
@@ -66,6 +67,8 @@ coverage.xml
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+product_photos
+*.jpg
 
 # Flask stuff:
 instance/

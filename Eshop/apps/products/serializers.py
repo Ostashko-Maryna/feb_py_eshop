@@ -13,3 +13,9 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ['id', 'product', 'user', 'review', 'available']
+
+
+class KitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Kit
+        fields = ['id', 'products', 'description', 'available', 'term', 'created_by']

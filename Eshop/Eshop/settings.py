@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'rest_framework',
 	'jet',
 	'django_fsm',
+	'django_json_widget',
 	'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'apps.products',
+    'apps.user_profiles',
 	'apps.payments',
     'apps.notifications',
     'apps.orders',
