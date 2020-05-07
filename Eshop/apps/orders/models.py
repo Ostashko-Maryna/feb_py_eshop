@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from apps.payments.models import Payments #added by Payments performer
 
 class Order(models.Model):
     order_number = models.UUIDField(default=uuid.uuid4, editable=True)
@@ -42,3 +43,5 @@ class OrderItem(models.Model):
     product = models.ForeignKey('products.Product', on_delete=models.PROTECT)
     amount_of_products = models.PositiveSmallIntegerField(default=1)
     discont = models.PositiveSmallIntegerField(default=0)
+
+Payments.create_payment(user = 'auth.User', order = Order.order_number) #added by Payments performer

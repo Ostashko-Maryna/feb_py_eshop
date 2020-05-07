@@ -113,18 +113,18 @@ class Payments(models.Model):
 class PaymentSystemLog(models.Model):
 	#data sent to payments_system
 	shopOrderNumber = models.ForeignKey('orders.Order', 
-		on_delete=models.PROTECT
+		on_delete=models.PROTECT, null=True, blank=False
 	)
-	payeeId = models.IntegerField()
+	payeeId = models.IntegerField(null=True, blank=False)
 	dt = models.DateTimeField(auto_now=True) #sent_at
-	billAmount = models.FloatField()
+	billAmount = models.FloatField(null=True, blank=False)
 	raw_data = JSONField()
 
 	#response from payments_system
-	SHOPBILLID = models.IntegerField()
-	SHOPORDERNUMBER = models.CharField(max_length=50)
-	BILL_AMOUNT = models.FloatField()
-	RESULT = models.SmallIntegerField()
+	SHOPBILLID = models.IntegerField(null=True, blank=False)
+	SHOPORDERNUMBER = models.CharField(max_length=50, null=True, blank=False)
+	BILL_AMOUNT = models.FloatField(null=True, blank=False)
+	RESULT = models.SmallIntegerField(null=True, blank=False)
 	raw_response = JSONField()
 
 	def __str__(self):
