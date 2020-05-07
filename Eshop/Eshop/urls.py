@@ -26,10 +26,7 @@ urlpatterns = [
     path('notifications/', include('apps.notifications.urls')),
     path('products/', include('apps.products.urls')),
     path('cart/', include('apps.carts.urls')),
-<<<<<<< HEAD
-    path('shipments/', include('apps.shipments.urls'))
-=======
+    path('shipments/', include('apps.shipments.urls')),
     path('galleries/', include('apps.galleries.urls')),
     path('user_profiles/', include('apps.user_profiles.urls')),
->>>>>>> b51214a3d1da53e51895592b76bea9584629e638
 ]

@@ -32,17 +32,14 @@ class Order(models.Model):
         (Shipment.new_post, 'New Post'),
     ]
     order_shipment = models.CharField(max_length=100, blank=False, choices=shipment_list)
-<<<<<<< HEAD
-    user = models.ForeignKey('auth.User', on_delete=models.PROTECT, default=None)
-    order_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-=======
+
     user = models.ForeignKey('auth.User', on_delete=models.PROTECT, null=True, blank=False, related_name='order')
     order_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     
     def save(self, *args, **kwargs):
         self.order_cost = sum([oi.sell_price for oi in self.orderitem.all()])
         super().save(*args, **kwargs)            
->>>>>>> b51214a3d1da53e51895592b76bea9584629e638
+
 
     def __str__(self):
         return str(self.order_number)

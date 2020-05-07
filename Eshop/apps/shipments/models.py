@@ -31,12 +31,12 @@ class Shipment(models.Model):
         ]
     variants = models.CharField(max_length=20, default = Shipment_variants.pickup, choices=variants_list)
 
-    def for_str(word):
+    def short_uuid(word):
         a = word.split("-")
         return a[len(a)-1]
 
     def __str__(self):
-        return 'Order №{}'.format(Shipment.for_str(str(self.shipment_id)))
+        return 'Order №{}'.format(Shipment.short_uuid(str(self.shipment_id)))
 
 class ShipmentLog():
     pass

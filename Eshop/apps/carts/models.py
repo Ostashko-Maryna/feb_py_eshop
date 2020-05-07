@@ -16,7 +16,7 @@ class Cart(models.Model):
 
         
 class CartItem(models.Model):
-    product = models.ForeignKey('products.Product', on_delete=models.SET_NULL, null=True, blank=True, related_name=)
+    product = models.ForeignKey('products.Product', on_delete=models.SET_NULL, null=True, blank=True)
     quantity = models.IntegerField(default=1)       
     price = models.FloatField(blank=True)
     cart = models.ForeignKey('Cart', on_delete=models.CASCADE)
