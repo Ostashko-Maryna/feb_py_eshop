@@ -1,16 +1,21 @@
 import uuid
+import datetime
 from django.db import models
-# from apps.orders.models import Order
+from django.utils import timezone
+# from apps.user_profiles.models import UserProfile
 
 class Shipment(models.Model):
     order = models.ForeignKey('orders.Order', on_delete = models.CASCADE)
     shipment_id = models.UUIDField(default=uuid.uuid4, editable=False)
-    shipment_status_date = models.DateTimeField(auto_now = True)
-    shipment_address_city = models.CharField(max_length = 30)
-    shipment_adress_street = models.CharField(max_length = 30)
+    shipment_status_date_created = models.DateTimeField(auto_now_add = True)
+    shipment_status_date_updated = models.DateTimeField(auto_now = True)
+    shipment_address_region = models.CharField(max_length = 50, null = True)
+    shipment_address_city = models.CharField(max_length = 50)
+    shipment_adress_street = models.CharField(max_length = 50)
     shipment_adress_house = models.CharField(max_length = 10)
     shipment_adress_apartment = models.PositiveSmallIntegerField(null = True, blank = True)
-    # delivery_phone_number = models.ForeignKey(Order.phone_number,on_delete = models.CASCADE)
+    # user_profile = models.OneToOneField(UserProfile,on_delete = models.CASCADE, primary_key = True)
+    # shipment_phone_number = user_profile.phone_number
 
     shipment_comment = models.TextField(blank = True)
 
@@ -37,6 +42,3 @@ class ShipmentLog():
     pass
 
 
-
-# notify message for user, notify response
-#TODO

@@ -33,6 +33,7 @@ class Order(models.Model):
     ]
     order_shipment = models.CharField(max_length=100, blank=False, choices=shipment_list)
     user = models.ForeignKey('auth.User', on_delete=models.PROTECT, default=None)
+    order_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
         return str(self.id)
