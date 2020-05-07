@@ -21,8 +21,8 @@ class CartItemAdmin(admin.ModelAdmin):
     list_editable = ['quantity']
 
 
-admin.site.unregister(Cart)
+#admin.site.unregister(Cart)
 admin.site.register(Cart, CartAdmin)
-admin.site.unregister(CartItem)
+#admin.site.unregister(CartItem)
 admin.site.register(CartItem, CartItemAdmin)
 
