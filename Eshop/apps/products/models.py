@@ -21,9 +21,10 @@ class Product(models.Model):
 
     @property
     def quantity_left(self):
-        #TODO: rise error if < 0
+        if self.stock_count <= 0:
+            raise ValueError('Unavailable product {}, {} (stock_count={})'.format(self.id, self.vendor_code,
+                                                                                  self.stock_count))
         return self.stock_count - sum([ci.quantity for ci in self.cartitem_set.all()])
-
 
     def __str__(self):
         return '{} {}'.format(self.name, self.price)
