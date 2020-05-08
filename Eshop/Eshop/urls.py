@@ -28,4 +28,6 @@ urlpatterns = [
     path('cart/', include('apps.carts.urls')),
     path('galleries/', include('apps.galleries.urls')),
     path('user_profiles/', include('apps.user_profiles.urls')),
+    path('rest-auth/', include('rest_framework.urls')),
+
 ]
