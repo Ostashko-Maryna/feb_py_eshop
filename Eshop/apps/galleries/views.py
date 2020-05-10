@@ -16,7 +16,6 @@ class GalleryList(generics.ListCreateAPIView):
 
 
 class ProductGalleryList(generics.ListCreateAPIView):
-    # queryset = Gallery.objects.all()
     serializer_class = GallerySerializer
 
     def get_queryset(self):
