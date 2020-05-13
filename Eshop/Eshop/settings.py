@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'apps.orders',
     'apps.galleries',
     'apps.carts',
-    'apps.shipments'
+    'apps.shipments',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -63,6 +64,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Eshop.urls'
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+}
 
 TEMPLATES = [
     {

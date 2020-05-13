@@ -1,9 +1,10 @@
-from django.http import HttpResponse
+# from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from .models import Product, Review, Kit
 from rest_framework import generics
 from rest_framework.pagination import LimitOffsetPagination
+from .models import Product, Review, Kit
 from .serializers import ProductSerializer, ReviewSerializer, KitSerializer
+from .filters import ProductFilter, ReviewFilter, KitFilter
 
 
 # def index(request):
@@ -21,6 +22,20 @@ class ProductList(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     pagination_class = LimitOffsetPagination
+    filter_class = ProductFilter
+
+# Variants without filter_class = ProductFilter
+#     def get_queryset(self):
+#         if 'search' in self.request.query_params:
+#             search_name = self.request.query_params['search']
+#             return Product.objects.filter(name__icontains=search_name)
+#         return Product.objects.all()
+#
+#     def get_queryset(self, *args, **kwargs):
+#         if self.request.GET.get('search'):
+#             return Product.objects.filter(product_name__icontains=self.request.GET.get('search'))
+#         return Product.objects.all()
+
 
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
@@ -32,6 +47,8 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class ProductReviewsList(generics.ListAPIView):
     serializer_class = ReviewSerializer
+    filter_class = ReviewFilter
+    pagination_class = LimitOffsetPagination
 
     def get_queryset(self):
         product = get_object_or_404(Product, pk=self.kwargs.get('product_id'))
@@ -41,6 +58,8 @@ class ProductReviewsList(generics.ListAPIView):
 
 class ProductKitsList(generics.ListAPIView):
     serializer_class = KitSerializer
+    filter_class = KitFilter
+    pagination_class = LimitOffsetPagination
 
     def get_queryset(self):
         product = get_object_or_404(Product, pk=self.kwargs.get('product_id'))
@@ -50,6 +69,8 @@ class ProductKitsList(generics.ListAPIView):
 class ReviewList(generics.ListCreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    filter_class = ReviewFilter
+    pagination_class = LimitOffsetPagination
 
 
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -63,6 +84,9 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
 class KitList(generics.ListCreateAPIView):
     queryset = Kit.objects.all()
     serializer_class = KitSerializer
+    filter_class = KitFilter
+    pagination_class = LimitOffsetPagination
+    filter_class = KitFilter
 
 
 class KitDetail(generics.RetrieveUpdateDestroyAPIView):

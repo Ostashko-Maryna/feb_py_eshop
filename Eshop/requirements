@@ -8,4 +8,5 @@ Pillow==7.1.1
 django-localflavor==3.0.1
 django-fsm==2.7.0
 django-json-widget==1.0.1
+django-filter==2.2.0
 

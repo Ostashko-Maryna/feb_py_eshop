@@ -19,12 +19,12 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Створено')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Оновлено')
 
-    @property
-    def quantity_left(self):
-        if self.stock_count <= 0:
-            raise ValueError('Unavailable product {}, {} (stock_count={})'.format(self.id, self.vendor_code,
-                                                                                  self.stock_count))
-        return self.stock_count - sum([ci.quantity for ci in self.cartitem_set.all()])
+    # @property
+    # def quantity_left(self):
+    #     if self.stock_count <= 0:
+    #         raise ValueError('Unavailable product {}, {} (stock_count={})'.format(self.id, self.vendor_code,
+    #                                                                               self.stock_count))
+    #     return self.stock_count - sum([ci.quantity for ci in self.cartitem_set.all()])
 
     def __str__(self):
         return '{} {}'.format(self.name, self.price)
