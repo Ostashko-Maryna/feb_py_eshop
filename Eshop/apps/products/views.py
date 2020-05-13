@@ -21,8 +21,8 @@ from .filters import ProductFilter, ReviewFilter, KitFilter
 class ProductList(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    pagination_class = LimitOffsetPagination
     filter_class = ProductFilter
+    pagination_class = LimitOffsetPagination
 
 # Variants without filter_class = ProductFilter
 #     def get_queryset(self):
@@ -86,7 +86,6 @@ class KitList(generics.ListCreateAPIView):
     serializer_class = KitSerializer
     filter_class = KitFilter
     pagination_class = LimitOffsetPagination
-    filter_class = KitFilter
 
 
 class KitDetail(generics.RetrieveUpdateDestroyAPIView):
