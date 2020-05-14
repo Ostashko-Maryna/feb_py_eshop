@@ -143,7 +143,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+# DEFAULT_PICTURE = os.path.join(STATIC_ROOT, 'pictures')
+
 
 # CELERY SETTINGS
 CELERY_BROKER_URL = 'redis://h:pb397d2414c2577f538fa4bddaa5e1f1631bc8106ddfdad886a4012b75c16ec6c@ec2-3-221-148-146.compute-1.amazonaws.com:16139'
