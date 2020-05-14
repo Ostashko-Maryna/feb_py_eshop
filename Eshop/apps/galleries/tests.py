@@ -84,25 +84,25 @@ class GalleryTestAPI(TestCase):
         })
 
 
-    
     def test_post_gallery(self):
+        p1 = Product.objects.create(name='other product', description='asd')
         with open(os.path.join(settings.STATIC_ROOT, 'test', 'image_file.jpg'), mode='rb') as fp:
             response = self.c.post(
                 '/galleries/1/',
                 data={
-                    "product": "1",
+                    "product": p1.id,
                     "name": "test_post_g",
                     "image": fp,
                     "size": "min",
-                }
+                } 
             )
-
+        print(response.json())
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         created_object = Gallery.objects.get(id=response.json()['id'])
         self.assertEqual(response.json(), {
             'product': {
-                'id': 1, 
-                'name': 'testp'
+                'id': p1.id, 
+                'name': p1.name
             }, 
             'id': created_object.id, 
             'name': 'test_post_g', 
