@@ -26,15 +26,27 @@ class OrdersTestAPI(APITestCase):
         }])
         '''
 
-        self.assertEqual(response.json(), [{
+        print(response.json())
+        print([{
             'id': self.order.id,
-            'order_number': self.order.order_number,
-            'order_date': self.order.order_date,
+            'order_number': str(self.order.order_number),
+            'order_date': self.order.order_date.isoformat().replace('+00:00', 'Z'),
             'order_status': self.order.order_status,
             'order_payment': self.order.order_payment,
             'order_shipment': self.order.order_shipment,
             'user': self.order.user.id,
-            'order_cost': self.order.order_cost,
+            'order_cost': '0.00',
         }])
-        print(response.json())
+        print(self.order.order_date.isoformat().replace('+00:00', 'Z'))
+        self.assertEqual(response.json(), [{
+            'id': self.order.id,
+            'order_number': str(self.order.order_number),
+            'order_date': self.order.order_date.isoformat().replace('+00:00', 'Z'),
+            'order_status': self.order.order_status,
+            'order_payment': self.order.order_payment,
+            'order_shipment': self.order.order_shipment,
+            'user': self.order.user.id,
+            'order_cost': '0.00',
+        }])
+
 

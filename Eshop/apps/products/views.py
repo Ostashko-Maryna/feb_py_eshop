@@ -4,7 +4,7 @@ from .models import Product, Review, Kit
 from rest_framework import generics
 from rest_framework.pagination import LimitOffsetPagination
 from .serializers import ProductSerializer, ReviewSerializer, KitSerializer
-
+from .filters import ProductFilter
 
 # def index(request):
 #     products = Product.objects.all()
@@ -18,9 +18,15 @@ from .serializers import ProductSerializer, ReviewSerializer, KitSerializer
 
 
 class ProductList(generics.ListCreateAPIView):
-    queryset = Product.objects.all()
     serializer_class = ProductSerializer
     pagination_class = LimitOffsetPagination
+    filter_class = ProductFilter
+
+    def get_queryset(self):
+        if 'search' in self.request.query_params:
+            search_name = self.request.query_params['search']
+            return Product.objects.filter(name__icontains=search_name)
+        return Product.objects.all()
 
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
