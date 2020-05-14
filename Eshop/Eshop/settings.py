@@ -64,12 +64,15 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Eshop.urls'
+
+
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
-        
     ),
 }
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
