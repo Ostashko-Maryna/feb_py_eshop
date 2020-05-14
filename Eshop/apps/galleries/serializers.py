@@ -1,9 +1,19 @@
-from django.contrib.auth.models import User	
+from django.contrib.auth.models import User 
 from rest_framework import serializers
+
 from apps.galleries.models import Gallery
+from apps.products.models import Product
+
+
+class ProductInGallerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id',  'name']
 
 
 class GallerySerializer(serializers.ModelSerializer):
+    product = ProductInGallerySerializer(read_only = True)
+
     image = serializers.ImageField(write_only=True)
     url = serializers.CharField(source='image_url', read_only=True)
     size_x = serializers.IntegerField(read_only=True)
@@ -11,4 +21,4 @@ class GallerySerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Gallery
-        fields = ['id', 'product', 'name', 'image', 'url', 'size', 'size_x', 'size_y']
+        fields = ['product', 'id', 'name', 'image', 'url', 'size', 'size_x', 'size_y']

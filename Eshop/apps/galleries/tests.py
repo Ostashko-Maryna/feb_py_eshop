@@ -13,72 +13,110 @@ class GalleryTestAPI(TestCase):
         p1 = Product.objects.create(name='testp', description='asd')
         # p2 = Product.objects.create(name='testp', description='asd')
         self.g1 = Gallery.objects.create(product=p1, name='test_g1', image='photo1.jpg')
-        # self.g2 = Gallery.objects.create(product=p2, name='test_g2', image='photo2.jpg')
+        self.g2 = Gallery.objects.create(product=p1, name='test_g2', image='photo2.jpg', size = 'max')
         self.c = APIClient()
 
+
+    def test_get_galleries_list(self):
+        response = self.c.get('/galleries/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), [{
+                'product': {
+                    'id': 1, 
+                    'name': 'testp'
+                }, 
+                'id': 1, 
+                'name': 'test_g1', 
+                'url': '/static/pictures/no_product.png', # 'D:\\My_doc\\Programing\\Django\\feb_py_eshop\\Eshop\\photo1.jpg'
+                'size': 'middle', 
+                'size_x': 150, 
+                'size_y': 150
+            }, {
+                'product': {
+                    'id': 1, 
+                    'name': 'testp'
+                }, 
+                'id': 2, 
+                'name': 'test_g2', 
+                'url': '/static/pictures/no_product.png', # 'D:\\My_doc\\Programing\\Django\\feb_py_eshop\\Eshop\\photo2.jpg'
+                'size': 'max', 
+                'size_x': 250, 
+                'size_y': 250
+        }])
+
+
+    def test_product_gallereis_pagination_list(self):
+        response = self.c.get('/galleries/1/?limit=1&offset=1')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {
+            'count': 2, 
+            'next': None, 
+            'previous': 'http://testserver/galleries/1/?limit=1', 
+            'results': [{
+                'product': {
+                    'id': 1, 
+                    'name': 'testp'
+                }, 
+                'id': 2, 
+                'name': 'test_g2', 
+                'url': '/static/pictures/no_product.png', 
+                'size': 'max', 
+                'size_x': 250, 
+                'size_y': 250
+            }]
+        })
+    
 
     def test_get_gallery(self):
         response = self.c.get('/galleries/1/1/')
         self.assertEqual(response.status_code, 200)
-        # print("="*59)
-        # print(response.json())
         self.assertEqual(response.json(), {
+            'product': {
+                'id': 1, 
+                'name': 'testp'
+            }, 
             'id': 1, 
-            'product': 1, 
             'name': 'test_g1', 
-            'url': None, 
+            'url': '/static/pictures/no_product.png', 
             'size': 'middle', 
             'size_x': 150, 
             'size_y': 150
         })
 
+
+    
     def test_post_gallery(self):
         with open(os.path.join(settings.STATIC_ROOT, 'test', 'image_file.jpg'), mode='rb') as fp:
             response = self.c.post(
-                '/galleries/',
+                '/galleries/1/',
                 data={
                     "product": "1",
-                    "name": "image_test",
+                    "name": "test_post_g",
                     "image": fp,
                     "size": "min",
-                    "size_x": "50",
-                    "size_y": "50"
                 }
             )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        # print("="*59)
-        # print(response.json())
+        created_object = Gallery.objects.get(id=response.json()['id'])
         self.assertEqual(response.json(), {
-            'id': 2, 
-            'product': 1, 
-            'name': 'image_test', 
-            'url': 'product_photos/2020/05/10/image_file.jpg', 
+            'product': {
+                'id': 1, 
+                'name': 'testp'
+            }, 
+            'id': created_object.id, 
+            'name': 'test_post_g', 
+            'url': created_object.image_url, 
             'size': 'min', 
             'size_x': 50, 
             'size_y': 50
         })
 
-    def test_product_gallereis_list(self):
-        response = self.c.get('/galleries/1/')
-        self.assertEqual(response.status_code, 200)
-        # print("="*59)
-        # print(response.json())
-        self.assertEqual(response.json(), [{
-            'id': 1, 
-            'product': 1, 
-            'name': 'test_g1', 
-            'url': None, 
-            'size': 'middle', 
-            'size_x': 150, 
-            'size_y': 150
-        }])
 
-
-    def test_get_gallery(self):
-            response = self.c.get('/galleries/1/2/') # {'detail': 'Not found.'}
-            self.assertEqual(response.status_code, 200) # AssertionError: 404 != 200
-            print("="*59)
-            print(response.json())  # FAILED (failures=1)
-                                   
+    def test_get_gallery_failed(self):
+        response = self.c.get('/galleries/1/3/')
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json(), {
+            'detail': 'Not found.'
+        })
 
