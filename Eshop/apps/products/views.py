@@ -4,6 +4,7 @@ from rest_framework import generics
 from rest_framework.pagination import LimitOffsetPagination
 from .models import Product, Review, Kit
 from .serializers import ProductSerializer, ReviewSerializer, KitSerializer
+
 from .filters import ProductFilter, ReviewFilter, KitFilter
 
 
@@ -19,10 +20,16 @@ from .filters import ProductFilter, ReviewFilter, KitFilter
 
 
 class ProductList(generics.ListCreateAPIView):
-    queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_class = ProductFilter
     pagination_class = LimitOffsetPagination
+    filter_class = ProductFilter
+
+    def get_queryset(self):
+        if 'search' in self.request.query_params:
+            search_name = self.request.query_params['search']
+            return Product.objects.filter(name__icontains=search_name)
+        return Product.objects.all()
 
 # Variants without filter_class = ProductFilter
 #     def get_queryset(self):

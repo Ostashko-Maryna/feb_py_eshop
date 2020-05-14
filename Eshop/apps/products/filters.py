@@ -1,9 +1,12 @@
 import django_filters
+
 from django_filters.rest_framework import FilterSet
 from .models import Product, Review, Kit
 
 
+
 class ProductFilter(FilterSet):
+
 
     def vendor_code_contains(self, qs, contains, value):
         return qs.filter(vendor_code__icontains=value)
@@ -22,9 +25,11 @@ class ProductFilter(FilterSet):
     description = django_filters.filters.CharFilter(method='description_contains')
     characteristics = django_filters.filters.CharFilter(method='characteristics_contains')
 
+
     class Meta:
         model = Product
         fields = ['id']
+
 
 
 class ReviewFilter(FilterSet):
@@ -48,3 +53,4 @@ class KitFilter(FilterSet):
     class Meta:
         model = Kit
         fields = ['id']
+                  
