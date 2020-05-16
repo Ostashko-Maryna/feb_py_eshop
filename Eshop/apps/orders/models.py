@@ -3,7 +3,9 @@ from django.db import models
 from datetime import datetime
 
 class Order(models.Model):
-    order_number = models.UUIDField(default=uuid.uuid4, editable=True)
+    def short_order_number():
+        return str(uuid.uuid4())[0:23]
+    order_number = models.CharField(max_length=30, default=short_order_number, editable=True)
     order_date = models.DateTimeField(auto_now_add=True)
     class Status:
         new = 'New order'
@@ -52,10 +54,10 @@ class OrderItem(models.Model):
 
     @property
     def sell_price(self):
-        if self.order.user.UserProfile.vip_status:
+        if self.order.user.userprofile.vip_status:
             return self.product.price * self.amount_of_products * 0.5
-        elif self.order.user.UserProfile.date_of_birth == datetime.now().strftime("%Y-%m-%d"):
-            return self.product.price * self.amount_of_products * 0.3
+        if str(self.order.user.userprofile.date_of_birth.strftime("%m-%d")) == datetime.now().strftime("%m-%d"):
+            return self.product.price * self.amount_of_products * 0.7
         elif self.amount_of_products >= 5:
             return self.product.price * self.amount_of_products * 0.9
         return self.product.price * self.amount_of_products
