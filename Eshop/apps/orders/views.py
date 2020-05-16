@@ -7,8 +7,8 @@ from django.contrib.auth.models import User
 class OrderList(generics.ListCreateAPIView):
     serializer_class = OrderSerializer
     pagination_class = pagination.LimitOffsetPagination
-    pagination.LimitOffsetPagination.default_limit = 10
-    pagination.LimitOffsetPagination.max_limit  = 100
+    pagination_class.default_limit = 10
+    pagination_class.max_limit = 100
 
     def get_queryset(self):
         user = get_object_or_404(User, pk=self.kwargs.get('user_id'))
