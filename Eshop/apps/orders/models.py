@@ -56,7 +56,7 @@ class OrderItem(models.Model):
     def sell_price(self):
         if self.order.user.userprofile.vip_status:
             return self.product.price * self.amount_of_products * 0.5
-        if str(self.order.user.userprofile.date_of_birth.strftime("%m-%d")) == datetime.now().strftime("%m-%d"):
+        elif str(self.order.user.userprofile.date_of_birth.strftime("%m-%d")) == datetime.now().strftime("%m-%d"):
             return self.product.price * self.amount_of_products * 0.7
         elif self.amount_of_products >= 5:
             return self.product.price * self.amount_of_products * 0.9
