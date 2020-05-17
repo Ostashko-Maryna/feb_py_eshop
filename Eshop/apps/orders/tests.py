@@ -34,12 +34,18 @@ class OrdersTestAPI(APITestCase):
         })
 
     def test_post_to_order_list(self):
+        
         response = self.c.post('/orders/user1/')
-        self.assertEqual(response.status_code, 201)
         print((response.json().get('id')))
+        print(response.json())
+        print('__'*30)
+        self.assertEqual(response.status_code, 201)
+        created_order = Order.objects.get(id=response.json().get('id'))
+        print(created_order)
+        #FIXME: add validation against obj form db
         self.assertEqual(response.json(), {
-            'id': response.json().get('id'),
-            'order_number': response.json().get('order_number'),
+            'id': created_order.id,
+            'order_number': created_order.order_number,
             'order_date': response.json().get('order_date'),
             'order_status': response.json().get('order_status'),
             'order_payment': response.json().get('order_payment'),
