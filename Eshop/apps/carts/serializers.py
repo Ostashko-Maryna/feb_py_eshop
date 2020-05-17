@@ -1,16 +1,18 @@
-# from django.contrib.auth.models import User	
 from rest_framework import serializers
 from apps.carts.models import Cart, CartItem
-from django.db.models import Sum
 
 
 class CartSerializer(serializers.ModelSerializer):
+    customer = serializers.HiddenField(default=serializers.CurrentUserDefault())    
     class Meta:
         model = Cart
-        fields = ['id', 'active', 'customer', 'created', 'updated', "total_price"]
+        fields = ['id', 'customer', 'not_empty', 'created', 'updated', 
+                  'total_price', 'cart_list', 'not_available']
+        
         
 
 class CartItemSerializer(serializers.ModelSerializer):
+    customer = serializers.HiddenField(default=serializers.CurrentUserDefault())
     class Meta:
         model = CartItem
-        fields = ['id', 'product', 'quantity', 'price', 'cart']
+        fields = ['product', 'stock_count', 'quantity', 'cart', 'customer']
