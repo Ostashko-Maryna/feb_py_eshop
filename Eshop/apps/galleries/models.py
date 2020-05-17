@@ -4,9 +4,6 @@ from django.conf import settings
 from django.db import models
 
 
-DEFAULT_PRODUCT_URL = (settings.STATIC_URL +'pictures/' + 'no_product.png')
-
-
 class Gallery(models.Model):
     product = models.ForeignKey('products.Product', default=1, related_name='images', on_delete=models.PROTECT)
     image = models.ImageField(null=True, blank=True, upload_to="product_photos/%Y/%m/%d")
@@ -40,7 +37,7 @@ class Gallery(models.Model):
             # check file exist
             self.image.file
         except FileNotFoundError:
-            return DEFAULT_PRODUCT_URL
+            return settings.DEFAULT_PRODUCT_URL
         return self.image.url
     
     def __str__(self):
