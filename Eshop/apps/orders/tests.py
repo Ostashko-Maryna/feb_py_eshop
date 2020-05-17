@@ -67,8 +67,8 @@ class OrdersTestAPI(APITestCase):
         response = self.c.post('/orders/3/orderitems/')
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json(), {
-            'id': 9,
-            'order': None,
-            'product': None,
-            'amount_of_products': 1
+            'id': response.json().get('id'),
+            'order': response.json().get('order'),
+            'product': response.json().get('product'),
+            'amount_of_products': response.json().get('amount_of_products')
         })
