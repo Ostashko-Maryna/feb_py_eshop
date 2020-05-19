@@ -47,7 +47,7 @@ class GalleryTestAPI(TestCase):
                 }, 
                 'id': 2, 
                 'name': 'test_g2', 
-                'url': '/static/pictures/no_product.png', 
+                'url': '/static/pictures/no_image.png', 
                 'size': 'max', 
                 'size_x': 250, 
                 'size_y': 250
@@ -69,7 +69,7 @@ class GalleryTestAPI(TestCase):
                 }, 
                 'id': 2, 
                 'name': 'test_g2', 
-                'url': '/static/pictures/no_product.png', 
+                'url': '/static/pictures/no_image.png', 
                 'size': 'max', 
                 'size_x': 250, 
                 'size_y': 250
@@ -166,7 +166,7 @@ class GalleryTestAPI(TestCase):
                 }, 
                 'id': 2, 
                 'name': 'test_g2', 
-                'url': '/static/pictures/no_product.png', 
+                'url': '/static/pictures/no_image.png', 
                 'size': 'max', 
                 'size_x': 250, 
                 'size_y': 250
@@ -229,7 +229,7 @@ class GalleryTestAPI(TestCase):
             }, 
             'id': 2, 
             'name': 'test_put_g', 
-            'url': created_object.image_url, # self.g2.image_url: /static/pictures/no_product.png
+            'url': created_object.image_url, # self.g2.image_url: /static/pictures/no_image.png
             'size': 'max', # Почему не дефолтное значение (middle)?
             'size_x': 250, 
             'size_y': 250

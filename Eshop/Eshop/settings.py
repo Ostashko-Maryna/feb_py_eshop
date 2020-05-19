@@ -145,7 +145,7 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
-DEFAULT_PRODUCT_URL = (STATIC_URL +'pictures/' + 'no_product.png')
+DEFAULT_PRODUCT_URL = (STATIC_URL +'pictures/' + 'no_image.png')
 
 
 # CELERY SETTINGS
