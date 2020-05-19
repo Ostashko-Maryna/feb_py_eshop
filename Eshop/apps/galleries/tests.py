@@ -106,7 +106,6 @@ class GalleryTestAPI(TestCase):
                     "size": "min",
                 } 
             )
-        
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         created_object = Gallery.objects.get(id=response.json()['id'])
         self.assertEqual(response.json(), {
@@ -129,4 +128,115 @@ class GalleryTestAPI(TestCase):
         self.assertEqual(response.json(), {
             'detail': 'Not found.'
         })
+
+
+    def test_gallereis_list_filter(self):
+        response = self.c.get('/galleries/?id=&product=1&name=1&size=')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {
+            'count': 1, 
+            'next': None, 
+            'previous': None, 
+            'results': [{
+                'product': {
+                    'id': 1, 
+                    'name': 'testp'
+                }, 
+                'id': 1, 
+                'name': 'test_g1', 
+                'url': self.g1.image_url, 
+                'size': 'middle', 
+                'size_x': 150, 
+                'size_y': 150
+            }]
+        })
+
+        
+    def test_product_gallereis_list_filter(self):
+        response = self.c.get('/galleries/1/?id=2&name=&size=m')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {
+            'count': 1, 
+            'next': None, 
+            'previous': None, 
+            'results': [{
+                'product': {
+                    'id': 1, 
+                    'name': 'testp'
+                }, 
+                'id': 2, 
+                'name': 'test_g2', 
+                'url': '/static/pictures/no_product.png', 
+                'size': 'max', 
+                'size_x': 250, 
+                'size_y': 250
+            }]
+        })
+
+
+    def test_product_not_gallereis_filter(self):
+        response = self.c.get('/galleries/1/?id=42&product=&name=&size=')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {
+            'count': 0, 
+            'next': None, 
+            'previous': None, 
+            'results': []
+        })
+
+
+    def test_patch_gallery(self):
+        p1 = Product.objects.create(name='other product', description='asd')
+        response = self.c.patch(
+            '/galleries/1/1/', 
+            data={
+                "product": p1.id,
+                "size": "max",
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {
+            'product': {
+                'id': p1.id, # 2
+                'name': 'other product'
+            }, 
+            'id': 1, 
+            'name': 'test_g1', 
+            'url': self.g1.image_url, 
+            'size': 'max', 
+            'size_x': 250, 
+            'size_y': 250
+        })
+
+
+    def test_put_gallery(self):
+        p1 = Product.objects.create(name='other product', description='asd')
+        with open(os.path.join(settings.STATIC_ROOT, 'test', 'image_file.jpg'), mode='rb') as fp:
+            response = self.c.put(
+                '/galleries/1/2/',
+                data={
+                    "product": p1.id,
+                    "name": "test_put_g",
+                    "image": fp,
+                } 
+            )
+        self.assertEqual(response.status_code, 200)
+        created_object = Gallery.objects.get(id=response.json()['id'])
+        self.assertEqual(response.json(), {
+            'product': {
+                'id': p1.id, # 2 
+                'name': 'other product'
+            }, 
+            'id': 2, 
+            'name': 'test_put_g', 
+            'url': created_object.image_url, # self.g2.image_url: /static/pictures/no_product.png
+            'size': 'max', # Почему не дефолтное значение (middle)?
+            'size_x': 250, 
+            'size_y': 250
+        })
+
+
+    def test_delete_gallery(self):
+        response = self.c.delete('/galleries/1/2/')
+        self.assertEqual(response.status_code, 204) # No Content
 
