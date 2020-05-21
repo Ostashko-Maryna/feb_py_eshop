@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'apps_generic.whodidit',
     'apps.products',
     'apps.user_profiles',
     'apps.payments',
@@ -61,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'apps_generic.whodidit.middleware.RequestMiddleware',
 ]
 
 ROOT_URLCONF = 'Eshop.urls'
