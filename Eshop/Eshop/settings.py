@@ -39,7 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+
+    'apps_generic.whodidit',
     'django_filters',
+
     'apps.products',
     'apps.user_profiles',
     'apps.payments',
@@ -60,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'apps_generic.whodidit.middleware.RequestMiddleware',
 ]
 
 ROOT_URLCONF = 'Eshop.urls'
@@ -138,7 +143,7 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
-# DEFAULT_PICTURE = os.path.join(STATIC_ROOT, 'pictures')
+DEFAULT_PRODUCT_URL = (STATIC_URL +'pictures/' + 'no_image.png')
 
 
 # CELERY SETTINGS
