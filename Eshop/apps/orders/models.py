@@ -35,10 +35,8 @@ class Order(models.Model):
         (Shipment.new_post, 'New Post'),
     ]
     order_shipment = models.CharField(max_length=100, blank=False, default=Shipment.pickup, choices=shipment_list)
-    user = models.ForeignKey('auth.User', on_delete=models.PROTECT, null=True, blank=False, related_name='order')
+    user = models.ForeignKey('auth.User', on_delete=models.PROTECT, related_name='order')
     order_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    def __str__(self):
-        return str(self.order_number)
 
     def save(self, *args, **kwargs):
         self.order_cost = sum([oi.sell_price for oi in self.orderitem.all()])
@@ -48,15 +46,15 @@ class Order(models.Model):
         return str(self.order_number)
 
 class OrderItem(models.Model):
-    order = models.ForeignKey('Order', on_delete=models.PROTECT, null=True, blank=False, related_name='orderitem')
-    product = models.ForeignKey('products.Product', on_delete=models.PROTECT, null=True, blank=False)
+    order = models.ForeignKey('Order', on_delete=models.PROTECT, related_name='orderitem')
+    product = models.ForeignKey('products.Product', on_delete=models.PROTECT, related_name='orderitem')
     amount_of_products = models.PositiveSmallIntegerField(default=1)
 
     @property
     def sell_price(self):
         if self.order.user.userprofile.vip_status:
             return self.product.price * self.amount_of_products * 0.5
-        elif str(self.order.user.userprofile.date_of_birth.strftime("%m-%d")) == datetime.now().strftime("%m-%d"):
+        elif self.order.user.userprofile.date_of_birth and self.order.user.userprofile.date_of_birth.strftime("%m-%d") == datetime.now().strftime("%m-%d"):
             return self.product.price * self.amount_of_products * 0.7
         elif self.amount_of_products >= 5:
             return self.product.price * self.amount_of_products * 0.9
