@@ -6,8 +6,8 @@ from django.db import models
 from apps_generic.whodidit.models import WhoDidIt
 
 
-# class Gallery(WhoDidIt):
-class Gallery(models.Model):
+class Gallery(WhoDidIt):
+#class Gallery(models.Model):
     product = models.ForeignKey('products.Product', default=1, related_name='images', on_delete=models.PROTECT)
     image = models.ImageField(null=True, blank=True, upload_to="product_photos/%Y/%m/%d")
     name = models.CharField(max_length=100)
