@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -27,22 +26,24 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
 
-
 # Application definition
 
 INSTALLED_APPS = [
     'rest_framework',
-	'jet',
-	'django_fsm',
-	'django_json_widget',
-	'django.contrib.admin',
+    'jet',
+    'django_fsm',
+    'django_json_widget',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+
     'apps_generic.whodidit',
+    'django_filters',
+
     'apps.products',
     'apps.user_profiles',
     'apps.payments',
@@ -51,7 +52,8 @@ INSTALLED_APPS = [
     'apps.galleries',
     'apps.carts',
     'apps.shipments',
-    'django_filters',
+    'apps.stats'
+
 ]
 
 MIDDLEWARE = [
@@ -67,13 +69,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'Eshop.urls'
 
-
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
 }
-
 
 TEMPLATES = [
     {
@@ -93,7 +93,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Eshop.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -107,7 +106,6 @@ DATABASES = {
         'PORT': 5432,
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -127,7 +125,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -140,7 +137,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
