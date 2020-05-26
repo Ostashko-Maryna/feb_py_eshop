@@ -29,5 +29,5 @@ urlpatterns = [
     path('galleries/', include('apps.galleries.urls')),
     path('user_profiles/', include('apps.user_profiles.urls')),
     path('rest-auth/', include('rest_framework.urls')),
-
+    path('shipments/', include('apps.shipments.urls')),
 ]
