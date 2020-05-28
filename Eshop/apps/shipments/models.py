@@ -5,7 +5,7 @@ from django.utils import timezone
 
 class Shipment(models.Model):
     order = models.ForeignKey('orders.Order', on_delete = models.CASCADE)
-    shipment_id = models.UUIDField(default=uuid.uuid4, editable=False)
+    shipment_id = models.UUIDField(default=uuid.uuid4, editable=True)
     shipment_status_date_created = models.DateTimeField(auto_now_add = True)
     shipment_status_date_updated = models.DateTimeField(auto_now = True)
     shipment_address_region = models.CharField(max_length = 50, null = True)

@@ -4,11 +4,13 @@ from apps.shipments.models import Shipment
 from apps.shipments.serializers import ShipmentSerializer, OrderInShipmentSerializer
 from rest_framework import generics
 from rest_framework.pagination import LimitOffsetPagination
+from .filters import ShipmentsFilter, OrdersFilter
 
 class ShipmentList(generics.ListCreateAPIView):
     serializer_class = ShipmentSerializer
-    queryset = Shipment.objects.all()
     pagination_class = LimitOffsetPagination
+    queryset = Shipment.objects.all()
+    filter_class = ShipmentsFilter
 
 class ShipmentDetails(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ShipmentSerializer
@@ -20,5 +22,6 @@ class ShipmentDetails(generics.RetrieveUpdateDestroyAPIView):
 class OrdersInShipmentList(generics.ListCreateAPIView):
     serializer_class = OrderInShipmentSerializer
     queryset = Order.objects.all()
+    filter_class = OrdersFilter
     pagination_class = LimitOffsetPagination
 
