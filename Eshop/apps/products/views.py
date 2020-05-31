@@ -2,8 +2,10 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import generics
 from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.permissions import IsAuthenticated
 from .models import Product, Review, Kit
 from .serializers import ProductSerializer, ReviewSerializer, KitSerializer
+from .permissions import ProductPermission
 
 from .filters import ProductFilter, ReviewFilter, KitFilter
 
@@ -23,7 +25,12 @@ class ProductList(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
     filter_class = ProductFilter
     pagination_class = LimitOffsetPagination
+    permission_classes = [IsAuthenticated]
     filter_class = ProductFilter
+
+# Variants without permission_classes = [IsAuthenticated]
+#     def get_queryset(self):
+#         return Product.objects.filter(created_by=self.request.user)
 
     def get_queryset(self):
         if 'search' in self.request.query_params:
@@ -46,6 +53,7 @@ class ProductList(generics.ListCreateAPIView):
 
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
+    permission_classes = [IsAuthenticated, ProductPermission]
 
     def get_object(self):
         obj = get_object_or_404(Product, pk=self.kwargs.get('product_id'))
@@ -59,7 +67,7 @@ class ProductReviewsList(generics.ListAPIView):
 
     def get_queryset(self):
         product = get_object_or_404(Product, pk=self.kwargs.get('product_id'))
-        #return Review.objects.filter(prduct_id=self.kwargs.get('product_id'))
+        # return Review.objects.filter(prduct_id=self.kwargs.get('product_id'))
         return product.reviews.all()
 
 
