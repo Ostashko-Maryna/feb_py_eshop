@@ -8,8 +8,10 @@ class PaymentsSerializer(serializers.ModelSerializer):
         model = Payments
         fields = [
             'id',
-            'payment_date',
             'user',
             'order',
             'paymentsystem',
+            'billAmount',
+            'payment_date',
+            'status',
         ]
