@@ -26,6 +26,17 @@ class Product(models.Model):
     #                                                                               self.stock_count))
     #     return self.stock_count - sum([ci.quantity for ci in self.cartitem_set.all()])
 
+    def permissions(self, user):
+        if self.created_by == user:
+            # # if objects has property class Status (example Payments)
+            # if self.status == Status.submitted:
+            if self.available:
+                return ['can_delete', 'can_edit', 'can_create']
+            else:
+                return ['can_create']
+        else:
+            return []
+
     def __str__(self):
         return '{} {}'.format(self.name, self.price)
 

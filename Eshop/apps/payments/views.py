@@ -4,11 +4,13 @@ from .models import Payments, PaymentSystemLog
 from rest_framework import generics
 from rest_framework.pagination import LimitOffsetPagination
 from .serializers import PaymentsSerializer
+from .filters import PaymentsFilter
 
 class PaymentsList(generics.ListCreateAPIView):
     queryset = Payments.objects.all()
     serializer_class = PaymentsSerializer
     pagination_class = LimitOffsetPagination
+    filterset_class = PaymentsFilter
 
 class PaymentsDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PaymentsSerializer
