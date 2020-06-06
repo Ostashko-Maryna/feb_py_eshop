@@ -1,17 +1,28 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from apps_generic.whodidit.models import WhoDidIt
+import uuid
 
 
-class Cart(models.Model):
-    customer = models.ForeignKey('auth.User', on_delete=models.CASCADE, 
+class Cart(WhoDidIt):
+    user = models.ForeignKey('auth.User', on_delete=models.PROTECT, 
                                  null=True, blank=True,
                                  verbose_name='Власник')
-    created = models.DateTimeField(auto_now_add=True, verbose_name='Створено')
-    updated = models.DateTimeField(auto_now=True, verbose_name='Змінено')
+    def generator():
+        return str(uuid.uuid4())
+    cart_number = models.CharField(max_length=37, 
+                                   default=generator, 
+                                   editable=True,
+                                   verbose_name='Номер кошика')
     
     def __str__(self):
-        return self.customer.username
+        return self.cart_number
+    
+    @property    
+    def cart_user_name(self):
+        return self.user.username
+    cart_user_name.fget.short_description = 'Власник кошика'
     
     @property
     def not_empty(self):
@@ -41,21 +52,26 @@ class Cart(models.Model):
     not_available.fget.short_description = 'Недоступні товари у кошику'
     
         
-class CartItem(models.Model):
+class CartItem(WhoDidIt):
     product = models.ForeignKey('products.Product', 
                                 on_delete=models.SET_NULL, 
                                 null=True, blank=True,
                                 verbose_name = 'Назва продукту',
                                 related_name='cartitem',)
     cart = models.ForeignKey('carts.Cart', on_delete=models.CASCADE, 
-                             verbose_name='Власник кошика',)
-    customer = models.ForeignKey('auth.User', 
-                                 on_delete=models.CASCADE, 
+                             verbose_name='Номер кошика',)
+    user = models.ForeignKey('auth.User', 
+                                 on_delete=models.PROTECT, 
                                  null=True, blank=True,
                                  verbose_name = 'Власник',)
     quantity = models.PositiveSmallIntegerField(default=1, 
                                                 verbose_name='Кількість')
 
+    @property    
+    def cart_user_name(self):
+        return self.user
+    cart_user_name.fget.short_description = 'Власник кошика'
+    
     def clean(self):
         if self.quantity > self.product.stock_count:
             raise ValidationError(_('Доступно: %(value)s'),
@@ -63,16 +79,19 @@ class CartItem(models.Model):
         elif self.quantity < 1:
             raise ValidationError(_('Не менше %(value)s'),
             params={'value': 1},)
+
     
     @property
     def product_name(self):
         return self.product.name
+    product_name.fget.short_description = 'Назва товару'
     
     @property
     def counter(self):
         self.product.stock_count -= self.quantity
         return self.product.stock_count
-    
+    counter.fget.short_description = 'Залишилось на складі'
+     
     @property
     def stock_count(self):
         return self.product.stock_count
