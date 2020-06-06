@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -27,20 +26,23 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
 
-
 # Application definition
 
 INSTALLED_APPS = [
     'rest_framework',
-	'jet',
-	'django_fsm',
-	'django_json_widget',
-	'django.contrib.admin',
+    'jet',
+    'django_fsm',
+    'django_json_widget',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+
+    'apps_generic.whodidit',
+    'django_filters',
 
     'apps.products',
     'apps.user_profiles',
@@ -49,7 +51,9 @@ INSTALLED_APPS = [
     'apps.orders',
     'apps.galleries',
     'apps.carts',
-    'apps.shipments'
+    'apps.shipments',
+    'apps.stats'
+
 ]
 
 MIDDLEWARE = [
@@ -60,9 +64,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'apps_generic.whodidit.middleware.RequestMiddleware',
 ]
 
 ROOT_URLCONF = 'Eshop.urls'
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+}
 
 TEMPLATES = [
     {
@@ -82,7 +93,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Eshop.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -96,7 +106,6 @@ DATABASES = {
         'PORT': 5432,
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -116,7 +125,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -130,11 +138,13 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+DEFAULT_PRODUCT_URL = (STATIC_URL +'pictures/' + 'no_image.png')
+
 
 # CELERY SETTINGS
 CELERY_BROKER_URL = 'redis://h:pb397d2414c2577f538fa4bddaa5e1f1631bc8106ddfdad886a4012b75c16ec6c@ec2-3-221-148-146.compute-1.amazonaws.com:16139'

@@ -5,19 +5,33 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 
 from rest_framework import generics
+from rest_framework.pagination import LimitOffsetPagination
+
 from apps.galleries.models import Gallery
 from apps.products.models import Product
 from apps.galleries.serializers import GallerySerializer
+from .filters import GalleryFilter, ProductGalleryFilter
 
 
 class GalleryList(generics.ListCreateAPIView):
-	queryset = Gallery.objects.all()
-	serializer_class = GallerySerializer
+    queryset = Gallery.objects.all()
+    serializer_class = GallerySerializer
+    pagination_class = LimitOffsetPagination
+    filter_class = GalleryFilter
+
+    # def get_queryset(self):
+    #     print('HHH')
+    #     print(self.request.query_params)
+    #     if 'search' in self.request.query_params:
+    #         search_name = self.request.query_params['search']
+    #         return Gallery.objects.filter(name__icontains=search_name)
+    #     return Gallery.objects.all()
 
 
 class ProductGalleryList(generics.ListCreateAPIView):
-    # queryset = Gallery.objects.all()
     serializer_class = GallerySerializer
+    pagination_class = LimitOffsetPagination
+    filter_class = ProductGalleryFilter
 
     def get_queryset(self):
         product = get_object_or_404(Product, pk=self.kwargs.get('product_id'))

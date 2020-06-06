@@ -19,11 +19,23 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Створено')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Оновлено')
 
-    @property
-    def quantity_left(self):
-        #TODO: rise error if < 0
-        return self.stock_count - sum([ci.quantity for ci in self.cartitem_set.all()])
+    # @property
+    # def quantity_left(self):
+    #     if self.stock_count <= 0:
+    #         raise ValueError('Unavailable product {}, {} (stock_count={})'.format(self.id, self.vendor_code,
+    #                                                                               self.stock_count))
+    #     return self.stock_count - sum([ci.quantity for ci in self.cartitem_set.all()])
 
+    def permissions(self, user):
+        if self.created_by == user:
+            # # if objects has property class Status (example Payments)
+            # if self.status == Status.submitted:
+            if self.available:
+                return ['can_delete', 'can_edit', 'can_create']
+            else:
+                return ['can_create']
+        else:
+            return []
 
     def __str__(self):
         return '{} {}'.format(self.name, self.price)
