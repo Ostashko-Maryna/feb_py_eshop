@@ -17,7 +17,7 @@ class CartList(generics.ListCreateAPIView):
     permission_classes = [IsOwnerOrReadOnly, CartPermissions, ]
     
     def get_queryset(self):
-        return Cart.objects.filter(user=self.request.user)
+        return Cart.objects.filter(user_id=self.request.user.id)
 
     # def get_queryset(self):
     #     user = get_object_or_404('User', pk=self.kwargs.get('cart_id'))
@@ -32,13 +32,9 @@ class CartDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsOwnerOrReadOnly, CartPermissions, ]
     def get_object(self):
         obj = get_object_or_404(Cart, 
-                                pk=self.kwargs.get('cart_id'))
+                                pk=self.kwargs.get('cart_id'),
+                                user=self.request.user,)
         return obj
-    
-class CartItemCreate(generics.CreateAPIView):
-    queryset = CartItem.objects.all()
-    serializer_class = CartItemSerializer
-    permission_classes = [IsOwnerOrReadOnly, CartItemPermissions, ]
     
 class CartItemList(generics.ListCreateAPIView):
     serializer_class = CartItemSerializer
@@ -46,11 +42,14 @@ class CartItemList(generics.ListCreateAPIView):
     filter_class = CartItemFilter
     pagination_class.default_limit = 5
     pagination_class.max_limit = 25
-    permission_classes = [IsOwnerOrReadOnly, CartItemPermissions, ]
+    permission_classes = [IsOwnerOrReadOnly, CartPermissions, ]
     
     def get_queryset(self):
-        return CartItem.objects.filter(user=self.request.user.id)
-    
+        # return CartItem.objects.filter(user=self.request.user)
+        cart = get_object_or_404(Cart, 
+                                pk=self.kwargs.get('cart_id'),
+                                user=self.request.user)
+        return CartItem.objects.filter(user=self.request.user, cart=cart)
     
 class CartItemDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CartItemSerializer
@@ -61,5 +60,6 @@ class CartItemDetail(generics.RetrieveUpdateDestroyAPIView):
     
     def get_object(self):
         obj = get_object_or_404(CartItem, 
-                                pk=self.kwargs.get('user_id'))
+                                pk=self.kwargs.get('cartitem_id'),
+                                user=self.request.user,)
         return obj

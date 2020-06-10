@@ -1,32 +1,32 @@
-import django_filters
 from django_filters.rest_framework import FilterSet
-from .models import Cart, CartItem
+from django_filters import DateRangeFilter, DateFilter
 
 
 class CartFilter(FilterSet):
-    def customer_contains(self, qs, contains, value):
-        return qs.filter(user__icontains=value)
-    def created_contains(self, qs, contains, value):
-        return qs.filter(created_on__icontains=value) 
+    
+    start_date = DateFilter(field_name='created_on', 
+                            lookup_expr=('gt'), 
+                            label='Створено після'
+                            ) 
+    end_date = DateFilter(field_name='created_on',
+                          lookup_expr=('lt'),
+                            label='Створено до'
+                          )
+    date_range = DateRangeFilter(field_name='created_on')
 
-    user = django_filters.filters.CharFilter(method='user_contains')
-    created_on = django_filters.filters.CharFilter(method='created_on_contains')
-
-    class Meta:
-        model = Cart
-        fields = ['id']
 
 class CartItemFilter(FilterSet):
-    def cart_contains(self, qs, contains, value):
-        return qs.filter(cart__icontains=value)
-    def customer_contains(self, qs, contains, value):
-        return qs.filter(user__icontains=value)     
 
-    cart = django_filters.filters.CharFilter(method='cart_contains')
-    user = django_filters.filters.CharFilter(method='user_contains')
-    
-    class Meta:
-        model = CartItem
-        fields = ['id']
+    start_date = DateFilter(field_name='created_on', 
+                            lookup_expr=('gt'), 
+                            label='Створено після'
+                            ) 
+    end_date = DateFilter(field_name='created_on',
+                          lookup_expr=('lt'),
+                            label='Створено до'
+                          )
+    date_range = DateRangeFilter(field_name='created_on')    
+
+  
     
 

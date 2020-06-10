@@ -14,14 +14,14 @@ class CartPermissions(BasePermission):
     def has_object_permission(self, request, view, obj):
         return get_object_or_404(Cart,
                                 pk=view.kwargs.get('cart_id'),
-                                user=view.request.user.id,
+                                user=view.request.user,
                                 )
 
 class CartItemPermissions(BasePermission):
     def has_object_permission(self, request, view, obj):
         return get_object_or_404(CartItem,
-                                pk=view.kwargs.get('user_id'),
-                                user=view.request.user.id,
+                                pk=view.kwargs.get('cartitem_id'),
+                                user=view.request.user,
                                 )
 
 # class AddCartItemPermission(BasePermission):
