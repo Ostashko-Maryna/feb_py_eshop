@@ -3,13 +3,13 @@ from rest_framework import generics
 from rest_framework.pagination import LimitOffsetPagination
 from .models import Stats
 from .serializers import StatsSerializer
-# add filters
+from .filters import StatsFilter
 
 
 class StatsList(generics.ListCreateAPIView):
     serializer_class = StatsSerializer
     pagination_class = LimitOffsetPagination
-    # add filters
+    filter_class = StatsFilter
 
     def get_queryset(self):
         if 'search' in self.request.query_params:

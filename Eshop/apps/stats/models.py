@@ -2,7 +2,6 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils import timezone
 import datetime
-import json
 
 
 class Stats(models.Model):
