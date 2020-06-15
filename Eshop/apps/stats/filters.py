@@ -15,6 +15,7 @@ class StatsFilter(FilterSet):
 
     user = django_filters.filters.CharFilter(method='user_contains')
     action = django_filters.filters.CharFilter(field_name='data__Action')
+    product = django_filters.filters.CharFilter(field_name='data__Product')
 
     class Meta:
         model = Stats
