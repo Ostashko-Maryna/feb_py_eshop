@@ -5,8 +5,7 @@ from apps.products.models import Product
 
 class CartTestAPI(APITestCase):
     def setUp(self):
-        
-        self.user = User.objects.create_user('cartname', 'cartname@cart.cart', 'cartname')
+        self.user = User.objects.create_user('cartname', 'cartname@yyy.yyy', 'cartnamepwrd',)
         self.product = Product.objects.create(vendor_code='1111',
                                               name='product_in_cart', 
                                               created_by=self.user,
@@ -16,14 +15,18 @@ class CartTestAPI(APITestCase):
                                               characteristics='1111',
                                               available=True, )
         self.cart = Cart.objects.create(user=self.user)
-        self.cartitem = self.cartitem.create(product=self.product, cart=self.cart)
+        self.cartitem = CartItem.objects.create(user=self.user, 
+                                                product=self.product, 
+                                                cart=self.cart)     
         self.c = APIClient()
         self.maxDiff = None
 
-    def get_cart(self):
+
+    def test_get_cart(self):
         print(self.user.id)
         print(self.cart.id)
-        response = self.c.get('/cart/1/1/')
+        # print(self.cartitem.id)
+        response = self.c.get('/cart/1/')
         self.assertEqual(response.status_code, 200)
         print(response.json())
         self.assertEqual(response.json(), {
@@ -31,19 +34,21 @@ class CartTestAPI(APITestCase):
             'next': None,
             'previous': None,
             'results': [{
-                'id': self.cart.id,
-                'user': self.cart.user.id,
-                'cart_number': self.cart.cart_number,
+                'id': self.cart.id, 
+                'user': self.cart.user.id, 
+                'not_empty': self.cart.not_empty, 
                 'created_on': self.cart.created_on.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-                'not_empty': self.cart.not_empty,
-            }]
+                'updated_on': self.cart.updated_on.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
+                'total_price': self.cart.total_price, 
+                'cart_list': self.cart.cart_list, 
+                'not_available': self.cart.not_available
+                }]
         })
-        
-    def get_cartitem(self):
+    def test_get_cartitem(self):
         print(self.user.id)
         print(self.cart.id)
         print(self.cartitem.id)
-        response = self.c.get('/carts/1/1/1/')
+        response = self.c.get('/cart/1/cartitem/')
         self.assertEqual(response.status_code, 200)
         print(response.json())
         self.assertEqual(response.json(), {
@@ -51,12 +56,28 @@ class CartTestAPI(APITestCase):
             'next': None,
             'previous': None,
             'results': [{
-                'id': self.cart.id,
+                'id': self.cartitem.id,
                 'user': self.cart.user.id,
-                'product': self.cartitem.product,
-                'cart': self.cartitem.cart,
-                'created_on': self.cart.created_on.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
+                'product': 
+                    {
+                    'id': 1,
+                    'vendor_code': '1111',
+                    'name': 'product_in_cart', 
+                    'created_by': None,
+                    'updated_by': None,
+                    'price': 1111, 
+                    'stock_count': 1111,
+                    'description': 'numbers', 
+                    'characteristics': '1111',
+                    'available': True, 
+                    },
+                'quantity': 1,
+                'updated_by': None,
+                'updated_on': '2020-06-13T10:49:12.476649Z',
+
+                'cart': self.cartitem.cart.id,
+                'created_on': self.cartitem.created_on.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
                 'not_empty': self.cart.not_empty,
-                'total_price': '1111.00',
+                'total_price': self.cart.total_price,
             }]
         })

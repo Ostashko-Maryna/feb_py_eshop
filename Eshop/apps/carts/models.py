@@ -12,16 +12,19 @@ class Cart(WhoDidIt):
     def generator():
         return str(uuid.uuid4())
     cart_number = models.CharField(max_length=37, 
-                                   default=generator, 
-                                   editable=True,
-                                   verbose_name='Номер кошика')
-    
+                                    default=generator, 
+                                    editable=True,
+                                    verbose_name='Номер кошика')
+
     def __str__(self):
         return self.cart_number
     
     @property    
     def cart_user_name(self):
-        return self.user.username
+        if self.user == None:
+            return ''
+        else:
+            return self.user.username
     cart_user_name.fget.short_description = 'Власник кошика'
     
     @property
