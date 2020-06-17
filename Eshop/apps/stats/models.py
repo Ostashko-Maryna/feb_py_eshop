@@ -28,18 +28,6 @@ class Stats(models.Model):
             pass
 
     '''
-    class Action:
-        view = 'View'
-        buy = 'Buy'
-        add_to_cart = 'Add_to_cart'
-
-    action_list = [
-        (Action.view, 'View'),
-        (Action.buy, 'Buy'),
-        (Action.add_to_cart,'Add to cart'),
-        ]
-    variants = models.CharField(max_length=20, default=Action.view, choices=action_list)
-    
     data = JSONField() example 
     action.buy = {"Product": "Product_2", "Sales Price": 134, "Sales Amount": 23, "Total sales":"3082"}
     action.view = {"Product": "Product_1"}

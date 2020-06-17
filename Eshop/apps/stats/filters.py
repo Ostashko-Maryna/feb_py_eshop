@@ -9,13 +9,15 @@ class StatsFilter(FilterSet):
     def user_contains(self, qs, contains, value):
         return qs.filter(user__username__icontains=value)
 
-    #def action_contains(self, qs, contains, value):
-       # value =Stats.objects.filter(data__has_key='Action')
-        #return qs.filter(data__contains=value)
+    def action_contains(self, qs, contains, value):
+        return qs.filter(data__Action__icontains=value)
+
+    def product_contains(self, qs, contains, value):
+        return qs.filter(data__Product__icontains=value)
 
     user = django_filters.filters.CharFilter(method='user_contains')
-    action = django_filters.filters.CharFilter(field_name='data__Action')
-    product = django_filters.filters.CharFilter(field_name='data__Product')
+    action = django_filters.filters.CharFilter(method='action_contains')
+    product = django_filters.filters.CharFilter(method='product_contains')
 
     class Meta:
         model = Stats

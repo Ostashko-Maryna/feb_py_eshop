@@ -22,5 +22,5 @@ class StatsDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = StatsSerializer
 
     def get_object(self):
-        obj = get_object_or_404(Stats, pk=self.kwargs.get('stats_id'))
+        obj = get_object_or_404(Stats, pk=self.kwargs.get('statss_id'))
         return obj
