@@ -3,7 +3,7 @@ from .models import Order, OrderItem
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, pagination
 from .filters import OrderFilter
-from .permisions import OrderPermisions, OrderItemPermisions #OrderListPermisions
+from .permisions import OrderListPermisions, OrderPermisions, OrderItemPermisions #OrderListPermisions
 from django.contrib.auth.models import User
 
 class OrderList(generics.ListCreateAPIView):
@@ -12,10 +12,12 @@ class OrderList(generics.ListCreateAPIView):
     pagination_class.default_limit = 10
     pagination_class.max_limit = 100
     filter_class = OrderFilter
-    #permission_classes = [OrderListPermisions]
+    permission_classes = [OrderListPermisions]
 
     def get_queryset(self):
         user = self.request.user
+        if user.is_anonymous:
+            return Order.objects.none()
         return user.order.all()
 
 class OrderDetail(generics.RetrieveUpdateAPIView):

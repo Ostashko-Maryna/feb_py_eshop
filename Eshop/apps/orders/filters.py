@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 class OrderFilter(FilterSet):
-    #order_cost = filters.NumericRangeFilter()
+    order_cost = filters.RangeFilter(label='фівфів')
     order_date = filters.DateFromToRangeFilter()
     order_payment = filters.ChoiceFilter(choices=Order.payment_list)
     order_shipment = filters.ChoiceFilter(choices=Order.shipment_list)
@@ -22,7 +22,5 @@ class OrderFilter(FilterSet):
 
     class Meta:
         model = Order
-        fields = {
-            'order_cost':['lte', 'gte']
-        }
+        fields = ['id']
 

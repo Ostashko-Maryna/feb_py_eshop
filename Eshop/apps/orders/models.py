@@ -46,7 +46,11 @@ class Order(models.Model):
     '''
     @classmethod
     def create_order(cls, user):
-       new_order = cls(user=user)
+       1) get last cart for user
+       2) get_or_create order
+          new_order = cls.get_or_create(user=user, cart=cart)
+       3) for cart_item in cart.cartitems.all():
+            orderitem.create(product=cart_item.product.......)
        return new_order
     '''
 
