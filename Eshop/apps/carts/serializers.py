@@ -6,15 +6,16 @@ class CartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cart
-        fields = '__all__'
+        fields = ['id', 'user', 'not_empty', 'created_on', 'updated_on', 
+                  'total_price', 'cart_list', 'not_available']
         
 class CartItemSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = CartItem
-        # fields = '__all__'        
-        fields = ['created_by',
-                  'product', 
-                  'stock_count', 
-                  'quantity',
-                  'cart']
+        fields = '__all__'        
+        # fields = ['created_by',
+        #           'product', 
+        #           'stock_count', 
+        #           'quantity',
+        #           'cart']
