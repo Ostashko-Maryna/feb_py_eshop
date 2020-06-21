@@ -31,6 +31,7 @@ class ShipmentSerializer(serializers.ModelSerializer):
 		created_shipment = super().create(validated_data)
 		order = Order.objects.filter(orders_data.get('id'))
 		# TODO: cannot unpack non-iterable int object
+		# put & post are not working
 		if order:
 			created_shipment.order = order
 			created_shipment.save()
