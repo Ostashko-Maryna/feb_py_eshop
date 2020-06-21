@@ -11,23 +11,24 @@ class WhoDidIt(models.Model):
         and to keep them filled up automatically.
     """
     created_on = models.DateTimeField(
-        verbose_name="created on",
-        auto_now_add=True, editable=False
+        verbose_name='Коли створено',
+        auto_now_add=True, editable=False,
     )
     created_by = models.ForeignKey(
-        verbose_name="created by",
+        verbose_name='Ким створено',
         to=User, null=True, blank=True, editable=False,
-        on_delete=models.SET_NULL, related_name='%(app_label)s_%(class)s_created_by'
+        on_delete=models.SET_NULL, related_name='%(app_label)s_%(class)s_created_by',
     )
 
     updated_on = models.DateTimeField(
-        verbose_name="updated on",
-        auto_now=True, editable=False
+        verbose_name='Коли змінено',
+        auto_now=True, editable=False,
+
     )
     updated_by = models.ForeignKey(
-        verbose_name="created by",
+        verbose_name='Ким змінено',
         to=User, null=True, blank=True, editable=False,
-        on_delete=models.SET_NULL, related_name='%(app_label)s_%(class)s_updated_by'
+        on_delete=models.SET_NULL, related_name='%(app_label)s_%(class)s_updated_by',
     )
 
     class Meta:

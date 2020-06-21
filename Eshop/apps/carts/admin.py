@@ -1,28 +1,30 @@
 from django.contrib import admin
 from apps.carts.models import Cart, CartItem
 
+
 class CartAdmin(admin.ModelAdmin):
 
     class Meta:
         model = Cart
 
-    fieldsets = [('Опис', {'fields': ['customer',  ]}),]         
-    list_display = ['id', 'customer', 'not_empty', 'created', 'updated', 
+    fieldsets = [('Опис', {'fields': ['user', ]}),]         
+    list_display = ['id', 'cart_user_name', 'cart_number', 'not_empty', 
+                    'created_on', 'updated_on', 'created_by', 
                   'total_price', 'cart_list', 'not_available']
+
 
 class CartItemAdmin(admin.ModelAdmin):
 
     class Meta:
         model = CartItem
 
-    fieldsets = [('Опис',  {'fields': ['product', 'stock_count', 'quantity', 'cart',]}),]
-    list_display = ['id', 'customer', 'cart', 'product', 'quantity', 'cart_item_status', 'stock_count']
-    readonly_fields = ['customer', 'stock_count',]
+    fieldsets = [('Опис',  {'fields': ['product', 'quantity', 'cart', ]}),]
+    list_display = ['id',  'created_by', 'cart', 'product', 'quantity', 
+                    'created_on', 'updated_on', 'created_by', 
+                    'cart_item_status', 'counter']
+    readonly_fields = ['user', 'counter']
     list_editable = ['quantity']
 
 
-#admin.site.unregister(Cart)
 admin.site.register(Cart, CartAdmin)
-#admin.site.unregister(CartItem)
 admin.site.register(CartItem, CartItemAdmin)
-
