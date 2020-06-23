@@ -26,6 +26,23 @@ class Product(models.Model):
     #                                                                               self.stock_count))
     #     return self.stock_count - sum([ci.quantity for ci in self.cartitem_set.all()])
 
+    @property
+    def quantity_left(self):
+        if self.stock_count <= 0:
+            self.available = False
+            return 0
+        else:
+            self.available = True
+            return self.stock_count
+
+    def check_add_cart_item(self, desired_quantity):
+        if self.quantity_left - desired_quantity < 0:
+            raise ValueError('Unavailable product {}, {} (stock_count={})'.format(self.id, self.vendor_code,
+                                                                                  self.stock_count))
+            # or use False instead raise
+            # return False
+        return True
+
     def permissions(self, user):
         if self.created_by == user:
             # # if objects has property class Status (example Payments)
