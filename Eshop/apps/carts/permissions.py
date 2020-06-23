@@ -1,8 +1,34 @@
-from rest_framework import permissions
+from rest_framework.permissions import BasePermission, SAFE_METHODS
+from django.shortcuts import get_object_or_404
+from .models import Cart, CartItem
 
-class IsOwnerOrReadOnly(permissions.BasePermission):
 
+class IsOwnerOrReadOnly(BasePermission):
     def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:  # GET, HEAD or OPTIONS requests.
+        if request.method in SAFE_METHODS:
             return True
-        return obj.customer == request.user # Instance must have an attribute named `user`.
+        return obj.user == request.user 
+
+
+class CartPermissions(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return get_object_or_404(Cart,
+                                pk=view.kwargs.get('cart_id'),
+                                user=view.request.user,
+                                )
+
+class CartItemPermissions(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return get_object_or_404(CartItem,
+                                pk=view.kwargs.get('cartitem_id'),
+                                user=view.request.user,
+                                )
+
+# class AddCartItemPermission(BasePermission):
+#     def has_permission(self, request, view):
+#         if request.method == 'POST':
+#             cartitem = get_object_or_404(CartItem, 
+#                                      # pk=view.kwargs.get('cartitem_id'),
+#                                      user=view.request.user,
+#                                      )
+#             return caritemt
