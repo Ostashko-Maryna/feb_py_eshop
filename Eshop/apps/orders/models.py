@@ -38,12 +38,24 @@ class Order(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.PROTECT, related_name='order')
     order_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
+
     def save(self, *args, **kwargs):
         self.order_cost = sum([oi.sell_price for oi in self.orderitem.all()])
-        super().save(*args, **kwargs)            
+        super().save(*args, **kwargs)
+
+    '''
+    @classmethod
+    def create_order(cls, user):
+       1) get last cart for user
+       2) get_or_create order
+          new_order = cls.get_or_create(user=user, cart=cart)
+       3) for cart_item in cart.cartitems.all():
+            orderitem.create(product=cart_item.product.......)
+       return new_order
+    '''
 
     def __str__(self):
-        return str(self.order_number)
+        return 'User: {}, Order number: {}'.format(self.user.username, self.order_number)
 
 class OrderItem(models.Model):
     order = models.ForeignKey('Order', on_delete=models.PROTECT, related_name='orderitem')
