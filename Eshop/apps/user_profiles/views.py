@@ -1,16 +1,19 @@
 from django.http import HttpResponse
 from django.http import Http404
-from .models import UserProfile, DeliveryAddress
 
 from rest_framework import generics
+from rest_framework.pagination import LimitOffsetPagination
 from .serializers import UserProfileSerializer, DeliveryAddressSerializer
 from django.shortcuts import get_object_or_404
 from .models import UserProfile, DeliveryAddress
+from .filters import UserProfileFilter, DeliveryAddressFilter
 
 
 class UserProfileList(generics.ListCreateAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
+    pagination_class = LimitOffsetPagination
+    filter_class = UserProfileFilter
 
 
 class UserProfileDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -24,6 +27,8 @@ class UserProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 class DeliveryAddressList(generics.ListCreateAPIView):
     queryset = DeliveryAddress.objects.all()
     serializer_class = DeliveryAddressSerializer
+    pagination_class = LimitOffsetPagination
+    filter_class = DeliveryAddressFilter
 
 
 class DeliveryAddressDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -32,12 +37,4 @@ class DeliveryAddressDetail(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         obj = get_object_or_404(DeliveryAddress, pk=self.kwargs.get('delivery_address_id'))
         return obj
-
-"""
-def index(request):
-    user_profile_list = UserProfile.objects.all()
-    return HttpResponse("Hello, OTHER world. You're at the polls index.")
-
-"""
-
 
