@@ -6,11 +6,13 @@ from django.http import HttpResponse
 
 from rest_framework import generics
 from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.permissions import IsAuthenticated
 
 from apps.galleries.models import Gallery
 from apps.products.models import Product
 from apps.galleries.serializers import GallerySerializer
 from .filters import GalleryFilter, ProductGalleryFilter
+from .permissions import GalleryPermission
 
 
 class GalleryList(generics.ListCreateAPIView):
@@ -18,6 +20,7 @@ class GalleryList(generics.ListCreateAPIView):
     serializer_class = GallerySerializer
     pagination_class = LimitOffsetPagination
     filter_class = GalleryFilter
+    permission_classes = [IsAuthenticated]
 
     # def get_queryset(self):
     #     print('HHH')
@@ -32,6 +35,7 @@ class ProductGalleryList(generics.ListCreateAPIView):
     serializer_class = GallerySerializer
     pagination_class = LimitOffsetPagination
     filter_class = ProductGalleryFilter
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         product = get_object_or_404(Product, pk=self.kwargs.get('product_id'))
@@ -40,8 +44,8 @@ class ProductGalleryList(generics.ListCreateAPIView):
 
 
 class GalleryDetail(generics.RetrieveUpdateDestroyAPIView):
-    
     serializer_class = GallerySerializer
+    permission_classes = [IsAuthenticated, GalleryPermission]
 
     def get_object(self):
         obj = get_object_or_404(Gallery, pk=self.kwargs.get('gallery_id'))

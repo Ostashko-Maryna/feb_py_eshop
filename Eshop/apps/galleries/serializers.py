@@ -13,13 +13,13 @@ class ProductInGallerySerializer(serializers.ModelSerializer):
 
 class GallerySerializer(serializers.ModelSerializer):
     image = serializers.ImageField(write_only=True)
-    url = serializers.CharField(source='image_url', read_only=True)
-    size_x = serializers.IntegerField(read_only=True)
-    size_y = serializers.IntegerField(read_only=True)
+    imageSmall_url = serializers.CharField(read_only=True)
+    imageMedium_url = serializers.CharField(read_only=True)
+    imageBig_url = serializers.CharField(read_only=True)
     
     class Meta:
         model = Gallery
-        fields = ['product', 'id', 'name', 'image', 'url', 'size', 'size_x', 'size_y']
+        fields = ['product', 'id', 'name', 'image', 'imageSmall_url', 'imageMedium_url', 'imageBig_url']
 
 
     def to_representation(self, instance):
@@ -27,3 +27,4 @@ class GallerySerializer(serializers.ModelSerializer):
         data['product'] = ProductInGallerySerializer(
             Product.objects.get(pk=data['product'])).data
         return data
+
