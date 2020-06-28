@@ -30,9 +30,11 @@ class Product(models.Model):
     def quantity_left(self):
         if self.stock_count <= 0:
             self.available = False
+            self.save()
             return 0
         else:
             self.available = True
+            self.save()
             return self.stock_count
 
     def check_add_cart_item(self, desired_quantity):
