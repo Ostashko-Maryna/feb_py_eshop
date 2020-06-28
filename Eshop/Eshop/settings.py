@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['127.0.0.1']
 INSTALLED_APPS = [
     'rest_framework',
     'jet',
+    'imagekit',
     'django_fsm',
     'django_json_widget',
     'django.contrib.admin',
@@ -73,6 +74,8 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
+    'PAGE_SIZE': 10,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
 }
 
 TEMPLATES = [
@@ -142,8 +145,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/product_photos/'
+
 DEFAULT_PRODUCT_URL = (STATIC_URL +'pictures/' + 'no_image.png')
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'product_photos')
 
 
 # CELERY SETTINGS
