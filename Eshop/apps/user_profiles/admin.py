@@ -3,7 +3,7 @@ from . models import UserProfile, DeliveryAddress
 
 
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ['user', 'first_name', 'last_name', 'date_of_birth', 'phone_number', 'vip_status']
+    list_display = ['user', 'date_of_birth', 'phone_number', 'vip_status']
 
 
 admin.site.register(UserProfile, UserProfileAdmin)
