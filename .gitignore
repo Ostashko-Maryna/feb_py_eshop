@@ -32,6 +32,9 @@ share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+*.pid
+*.ini
+uwsgi_params
 MANIFEST
 
 # PyInstaller
