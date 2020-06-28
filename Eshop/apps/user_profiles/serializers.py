@@ -7,7 +7,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ['id', 'user', 'first_name', 'last_name', 'date_of_birth', 'phone_number', 'vip_status']
+        fields = ['id', 'user','date_of_birth', 'phone_number', 'vip_status']
 
 
 class DeliveryAddressSerializer(serializers.ModelSerializer):
